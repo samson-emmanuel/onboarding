@@ -103,13 +103,13 @@
   <script>
     const userStr = localStorage.getItem('user');
     if (!userStr) {
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
     } else {
         try {
             JSON.parse(userStr);
         } catch (e) {
             localStorage.removeItem('user');
-            window.location.href = 'login.html';
+            window.location.href = 'index.html';
         }
     }
 
@@ -216,7 +216,7 @@
 
     function logout() {
         localStorage.clear();
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
     }
 
     function setLogoLink() {
@@ -239,7 +239,7 @@
             const rolePage = `index-${userRole.toLowerCase().replace('_', '-')}.html`;
             logoLink.href = rolePage;
         } else {
-            logoLink.href = 'login.html'; // Default to login if no role is found
+            logoLink.href = 'index.html'; // Default to login if no role is found
         }
     }
 

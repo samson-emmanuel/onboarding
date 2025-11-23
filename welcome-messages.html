@@ -113,19 +113,19 @@
   <script>
     const userStr = localStorage.getItem('user');
     if (!userStr) {
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
     } else {
         try {
             JSON.parse(userStr);
         } catch (e) {
             localStorage.removeItem('user');
-            window.location.href = 'login.html';
+            window.location.href = 'index.html';
         }
     }
 
     function logout() {
         localStorage.clear();
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
     }
     
     async function getCEOImage() {
@@ -219,7 +219,7 @@
             const rolePage = `index-${userRole.toLowerCase().replace('_', '-')}.html`;
             logoLink.href = rolePage;
         } else {
-            logoLink.href = 'login.html';
+            logoLink.href = 'index.html';
         }
     }
 

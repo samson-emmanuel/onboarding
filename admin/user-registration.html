@@ -168,12 +168,12 @@
   <script>
     function logout() {
         localStorage.clear();
-        window.location.href = '../login.html';
+        window.location.href = '../index.html';
     }
 
     const token = localStorage.getItem('authToken');
     if (!token) {
-        window.location.href = '../login.html';
+        window.location.href = '../index.html';
     }
 
     async function registerUser(userData) {
@@ -277,7 +277,7 @@
             const rolePage = `index-${userRole.toLowerCase().replace('_', '-')}.html`;
             logoLink.href = rolePage;
         } else {
-            logoLink.href = '../login.html'; // Default to login if no role is found
+            logoLink.href = '../index.html'; // Default to login if no role is found
         }
     }
 

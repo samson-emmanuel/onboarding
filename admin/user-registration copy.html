@@ -99,13 +99,13 @@
         // Logout function
         function logout() {
             localStorage.clear();
-            window.location.href = '../login.html';
+            window.location.href = '../index.html';
         }
 
         // Check if user is authenticated
         const token = localStorage.getItem('authToken');
         if (!token) {
-            window.location.href = '../login.html';
+            window.location.href = '../index.html';
         }
 
         // Inline register function

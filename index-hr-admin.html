@@ -162,10 +162,10 @@
                 localStorage.setItem('user', JSON.stringify(user));
             } catch (e) {
                 console.error("Error parsing user data from URL", e);
-                window.location.href = 'login.html';
+                window.location.href = 'index.html';
             }
         } else {
-            window.location.href = 'login.html';
+            window.location.href = 'index.html';
         }
     } else {
         try {
@@ -173,12 +173,12 @@
         } catch (e) {
             console.error("Error parsing user data from localStorage", e);
             localStorage.removeItem('user');
-            window.location.href = 'login.html';
+            window.location.href = 'index.html';
         }
     }
 
     if (!user || user.role !== 'Hr_Admin') {
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
     } else {
         document.getElementById('welcome').innerHTML = `
           <h1 class="text-4xl font-extrabold mb-3">Welcome back, ${user.firstName} ${user.lastName}!</h1>
@@ -188,7 +188,7 @@
 
     function logout() {
         localStorage.clear();
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
     }
     
     function setLogoLink() {
@@ -211,7 +211,7 @@
             const rolePage = `index-${userRole.toLowerCase().replace('_', '-')}.html`;
             logoLink.href = rolePage;
         } else {
-            logoLink.href = 'login.html'; // Default to login if no role is found
+            logoLink.href = 'index.html'; // Default to login if no role is found
         }
     }
 
