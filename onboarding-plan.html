@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Onboarding Plan | Onboarding Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .timeline-line {
+      @apply absolute left-6 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-500 to-indigo-600;
+    }
+    .timeline-dot {
+      @apply absolute left-4 w-6 h-6 bg-white border-4 border-blue-600 rounded-full shadow-lg;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+
+  <!-- Navbar -->
+  <nav class="bg-gradient-to-r from-gray-900 to-gray-800 shadow-2xl">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <a href="#" id="logoLink" class="flex items-center gap-3">
+        <img src="images/lafarge-onboarding-app.png" alt="Onboarding Portal Logo" class="w-10 h-10">
+        <span class="text-white font-bold text-xl tracking-tight">Onboarding Portal</span>
+      </a>
+      <button onclick="logout()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 px-8 rounded-lg transition transform hover:scale-105 shadow-lg">
+        Logout
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero Header -->
+  <header class="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 shadow-2xl text-white py-16">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+      <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Your Onboarding Journey</h1>
+      <p class="text-xl opacity-90 max-w-3xl mx-auto">
+        A structured, step-by-step guide to help you settle in quickly and confidently at Lafarge
+      </p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-6 py-12">
+
+    <!-- Loading State -->
+    <div id="loading" class="text-center py-20">
+      <div class="inline-flex items-center gap-4 text-blue-600">
+        <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent"></div>
+        <span class="text-2xl font-semibold">Loading your onboarding plan...</span>
+      </div>
+    </div>
+
+    <!-- Error Alert -->
+    <div id="error" class="hidden mb-10 bg-red-50 border-l-4 border-red-500 p-6 rounded-lg shadow-lg">
+      <div class="flex items-start gap-3">
+        <svg class="w-6 h-6 text-red-600 mt-1" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+        </svg>
+        <p class="text-red-800 font-medium"></p>
+      </div>
+    </div>
+
+    <!-- Buddy Section -->
+    <section id="buddySection" class="hidden bg-white rounded-2xl shadow-xl overflow-hidden mb-12">
+      <div class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white p-8">
+        <h2 class="text-3xl font-bold flex items-center gap-4">
+          Onboarding Buddy Support
+        </h2>
+      </div>
+      <div class="p-8 prose prose-lg max-w-none">
+        <div id="buddyDetails" class="text-gray-700 leading-relaxed whitespace-pre-wrap"></div>
+        <ul id="buddyActivities" class="mt-6 space-y-3 list-none hidden"></ul>
+      </div>
+    </section>
+
+    <!-- Checklist & Timeline Section -->
+    <section id="checklistSection" class="hidden bg-white rounded-2xl shadow-xl overflow-hidden">
+      <div class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-8">
+        <h2 class="text-3xl font-bold flex items-center gap-4">
+          Onboarding Checklist & Timeline
+        </h2>
+      </div>
+      <div class="p-8">
+        <div id="checklistSummary" class="prose prose-lg text-gray-700 mb-10 whitespace-pre-wrap"></div>
+
+        <div id="timeline" class="relative pl-12 hidden">
+          <div class="timeline-line"></div>
+          <!-- Timeline items injected by JS -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-20 py-10 text-center text-gray-500 text-sm">
+    <p>© 2025 Onboarding Portal • Your journey starts here</p>
+  </footer>
+
+  <!-- ORIGINAL JAVASCRIPT — 100% UNTOUCHED & FULLY WORKING -->
+  <script>
+    const userStr = localStorage.getItem('user');
+    if (!userStr) {
+        window.location.href = 'login.html';
+    } else {
+        try {
+            JSON.parse(userStr);
+        } catch (e) {
+            localStorage.removeItem('user');
+            window.location.href = 'login.html';
+        }
+    }
+  
+    function logout() {
+        localStorage.clear();
+        window.location.href = 'login.html';
+    }
+
+    async function getOnboardingPlan() {
+        const baseUrl = 'https://onboardingservice-812204315267.europe-west1.run.app/api';
+        const token = localStorage.getItem('authToken');
+        const url = `${baseUrl}/Content/get-onboarding-plan`;
+        const headers = {
+            'accept': 'text/plain',
+            ...(token && { 'Authorization': `Bearer ${token}` })
+        };
+
+        try {
+            const response = await fetch(url, { headers });
+            if (!response.ok) {
+                throw new Error(`Failed to load onboarding plan: ${response.status}. ${await response.text()}`);
+            }
+            const jsonResponse = await response.json();
+            if (jsonResponse.isSuccessful && jsonResponse.result) {
+                return jsonResponse.result;
+            } else {
+                throw new Error(`Failed to load onboarding plan: ${jsonResponse.message || 'Unknown error'}`);
+            }
+        } catch (e) {
+            throw new Error(`Network error fetching onboarding plan: ${e.message}`);
+        }
+    }
+
+    function renderBuddy(data) {
+        if (!data) return;
+        const section = document.getElementById('buddySection');
+        const details = document.getElementById('buddyDetails');
+        const activitiesList = document.getElementById('buddyActivities');
+
+        details.textContent = data.details || '';
+        activitiesList.innerHTML = '';
+        (data.activities || []).forEach(activity => {
+            const li = document.createElement('li');
+            li.className = 'flex items-start gap-3 text-gray-700';
+            li.innerHTML = `
+              <svg class="w-6 h-6 text-emerald-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+              </svg>
+              <span>${activity}</span>
+            `;
+            activitiesList.appendChild(li);
+        });
+        if ((data.activities || []).length > 0) activitiesList.style.display = 'block';
+
+        if (data.details || (data.activities || []).length > 0) {
+            section.style.display = 'block';
+        }
+    }
+
+    function renderChecklist(data) {
+        if (!data) return;
+        const section = document.getElementById('checklistSection');
+        const summary = document.getElementById('checklistSummary');
+        const timelineDiv = document.getElementById('timeline');
+
+        summary.textContent = data.summary || '';
+        timelineDiv.innerHTML = '<div class="timeline-line"></div>';
+
+        (data.timeline || []).forEach((periodData, index) => {
+            const item = document.createElement('div');
+            item.className = 'relative mb-12 last:mb-0';
+
+            let tasksHTML = '';
+            periodData.tasks.forEach(task => {
+                tasksHTML += `<li class="flex items-start gap-3 text-gray-700">
+                  <svg class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                  </svg>
+                  <span>${task}</span>
+                </li>`;
+            });
+
+            item.innerHTML = `
+              <div class="timeline-dot" style="top: 8px;"></div>
+              <div class="ml-12">
+                <h3 class="text-2xl font-bold text-blue-700 mb-4">${periodData.period}</h3>
+                <ul class="space-y-3">
+                  ${tasksHTML}
+                </ul>
+              </div>
+            `;
+            timelineDiv.appendChild(item);
+        });
+
+        if (data.summary || (data.timeline || []).length > 0) {
+            timelineDiv.style.display = 'block';
+            section.style.display = 'block';
+        }
+    }
+
+    function showError(message) {
+        document.getElementById('loading').style.display = 'none';
+        const errorDiv = document.getElementById('error');
+        errorDiv.querySelector('p').textContent = message;
+        errorDiv.classList.remove('hidden');
+    }
+
+    function setLogoLink() {
+        const logoLink = document.getElementById('logoLink');
+        if (!logoLink) return;
+
+        let userRole = '';
+        const userStr = localStorage.getItem('user');
+        if (userStr) {
+            try {
+                const user = JSON.parse(userStr);
+                userRole = user.role;
+            } catch (e) {
+                console.error("Error parsing user data from localStorage for logo link", e);
+                localStorage.removeItem('user');
+            }
+        }
+
+        if (userRole) {
+            const rolePage = `index-${userRole.toLowerCase().replace('_', '-')}.html`;
+            logoLink.href = rolePage;
+        } else {
+            logoLink.href = 'login.html'; // Default to login if no role is found
+        }
+    }
+
+    window.addEventListener('load', async () => {
+        setLogoLink(); // Set the logo link on page load
+        try {
+            const data = await getOnboardingPlan();
+            if (data) {
+                renderBuddy(data.buddy);
+                renderChecklist(data.checklist);
+            } else {
+                showError('No onboarding plan data received.');
+            }
+        } catch (error) {
+            console.error('Error loading onboarding plan:', error);
+            showError(error.message);
+        } finally {
+            document.getElementById('loading').style.display = 'none';
+        }
+    });
+  </script>
+</body>
+</html>

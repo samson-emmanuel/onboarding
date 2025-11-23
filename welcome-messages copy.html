@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Messages - Onboarding Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+    <nav class="bg-gray-800 text-white">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="#" id="logoLink" class="flex items-center space-x-3">
+                        <img src="images/lafarge-onboarding-app.png" alt="Onboarding Portal Logo" class="w-10 h-10">
+                        <span class="text-white font-bold text-xl tracking-tight">Onboarding Portal</span>
+                    </a>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="index-hr-admin.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Dashboard</a>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <button onclick="logout()" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-white shadow">
+        <div class="container mx-auto px-4 py-6">
+            <h1 class="text-3xl font-bold text-gray-900">Welcome Messages</h1>
+            <p class="text-gray-600 mt-2">Heartfelt greetings from our leadership team</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-6">
+        <div id="loading" class="text-center text-gray-600">Loading welcome messages...</div>
+        <div id="error" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert"></div>
+
+        <!-- CEO Welcome Card -->
+        <div id="ceoCard" class="bg-white rounded-lg shadow-md overflow-hidden md:flex mt-6" style="display: none;">
+            <img id="ceoImage" class="w-full h-56 md:w-1/3 md:h-auto object-cover" alt="CEO Photo" style="display: none;">
+            <div id="ceoPlaceholder" class="w-full h-56 md:w-1/3 bg-gray-200 flex items-center justify-center text-gray-500">CEO Photo</div>
+            <div class="p-6 md:w-2/3">
+                <p id="ceoMessage" class="text-gray-700 text-lg leading-relaxed mb-4"></p>
+                <div class="text-right">
+                    <p id="ceoName" class="font-bold text-xl text-gray-900"></p>
+                    <p id="ceoTitle" class="text-md text-gray-600"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- HR Welcome Card -->
+        <div id="hrCard" class="bg-white rounded-lg shadow-md overflow-hidden md:flex mt-6" style="display: none;">
+             <img id="hrImage" class="w-full h-56 md:w-1/3 md:h-auto object-cover" alt="HR Director Photo" style="display: none;">
+            <div id="hrPlaceholder" class="w-full h-56 md:w-1/3 bg-gray-200 flex items-center justify-center text-gray-500">HR Director Photo</div>
+            <div class="p-6 md:w-2/3">
+                <p id="hrMessage" class="text-gray-700 text-lg leading-relaxed mb-4"></p>
+                <div class="text-right">
+                    <p id="hrName" class="font-bold text-xl text-gray-900"></p>
+                    <p id="hrTitle" class="text-md text-gray-600"></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const userStr = localStorage.getItem('user');
+        if (!userStr) {
+            window.location.href = 'login.html';
+        } else {
+            try {
+                JSON.parse(userStr);
+            } catch (e) {
+                localStorage.removeItem('user');
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+        
+        // Inline functions
+        async function getCEOImage() {
+            const baseUrl = 'https://onboardingservice-812204315267.europe-west1.run.app/api';
+            const token = localStorage.getItem('authToken');
+            const url = `${baseUrl}/Gallery/get-ceo-images`;
+            const headers = { 'accept': 'text/plain', ...(token && { 'Authorization': `Bearer ${token}` }) };
+            const response = await fetch(url, { headers });
+            if (!response.ok) throw new Error('Failed to load CEO image');
+            const data = await response.json();
+            return data.result[0]?.imageBase64;
+        }
+
+        async function getHRImage() {
+            const baseUrl = 'https://onboardingservice-812204315267.europe-west1.run.app/api';
+            const token = localStorage.getItem('authToken');
+            const url = `${baseUrl}/Gallery/get-hr-images`;
+            const headers = { 'accept': 'text/plain', ...(token && { 'Authorization': `Bearer ${token}` }) };
+            const response = await fetch(url, { headers });
+            if (!response.ok) throw new Error('Failed to load HR image');
+            const data = await response.json();
+            return data.result[0]?.imageBase64;
+        }
+
+        async function getWelcomeMessages() {
+            const baseUrl = 'https://onboardingservice-812204315267.europe-west1.run.app/api';
+            const token = localStorage.getItem('authToken');
+            const url = `${baseUrl}/Content/get-welcome-messages`;
+            const headers = { 'accept': 'text/plain', ...(token && { 'Authorization': `Bearer ${token}` }) };
+            const response = await fetch(url, { headers });
+            if (!response.ok) throw new Error(`Failed to load welcome messages: ${response.status}. ${await response.text()}`);
+            const jsonResponse = await response.json();
+            if (jsonResponse.isSuccessful && jsonResponse.result) {
+                return jsonResponse.result;
+            } else {
+                throw new Error(`Failed to load welcome messages: ${jsonResponse.message || 'Unknown error'}`);
+            }
+        }
+
+        // Function to render CEO welcome
+        function renderCEO(data, imageBase64) {
+            if (!data) return;
+            document.getElementById('ceoName').textContent = data.name || '';
+            document.getElementById('ceoTitle').textContent = data.title || '';
+            document.getElementById('ceoMessage').textContent = data.message || '';
+            if (imageBase64) {
+                document.getElementById('ceoImage').src = `data:image/png;base64,${imageBase64}`;
+                document.getElementById('ceoImage').style.display = 'block';
+                document.getElementById('ceoPlaceholder').style.display = 'none';
+            }
+            document.getElementById('ceoCard').style.display = 'flex';
+        }
+
+        // Function to render HR welcome
+        function renderHR(data, imageBase64) {
+            if (!data) return;
+            document.getElementById('hrName').textContent = data.name || '';
+            document.getElementById('hrTitle').textContent = data.title || '';
+            document.getElementById('hrMessage').textContent = (data.message || '').replace('{Name}', 'New Team Member');
+            if (imageBase64) {
+                document.getElementById('hrImage').src = `data:image/jpeg;base64,${imageBase64}`;
+                document.getElementById('hrImage').style.display = 'block';
+                document.getElementById('hrPlaceholder').style.display = 'none';
+            }
+            document.getElementById('hrCard').style.display = 'flex';
+        }
+
+        // Function to show error
+        function showError(message) {
+            document.getElementById('loading').style.display = 'none';
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        function setLogoLink() {
+            const logoLink = document.getElementById('logoLink');
+            if (!logoLink) return;
+
+            let userRole = '';
+            const userStr = localStorage.getItem('user');
+            if (userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    userRole = user.role;
+                } catch (e) {
+                    console.error("Error parsing user data from localStorage for logo link", e);
+                    localStorage.removeItem('user');
+                }
+            }
+
+            if (userRole) {
+                const rolePage = `index-${userRole.toLowerCase().replace('_', '-')}.html`;
+                logoLink.href = rolePage;
+            } else {
+                logoLink.href = 'login.html'; // Default to login if no role is found
+            }
+        }
+
+        // Load data on page load
+        window.addEventListener('load', async () => {
+            setLogoLink(); // Set the logo link on page load
+            try {
+                const [ceoImage, hrImage, messages] = await Promise.all([
+                    getCEOImage().catch(e => { console.error(e); return null; }),
+                    getHRImage().catch(e => { console.error(e); return null; }),
+                    getWelcomeMessages()
+                ]);
+                if (messages) {
+                    renderCEO(messages.ceo, ceoImage);
+                    renderHR(messages.hr, hrImage);
+                } else {
+                    showError('Could not retrieve welcome messages.');
+                }
+            } catch (error) {
+                console.error('Error loading welcome page:', error);
+                showError(error.message);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

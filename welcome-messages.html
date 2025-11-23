@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome Messages | Onboarding Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .card-hover {
+      @apply transition-all duration-500 transform hover:-translate-y-4 hover:shadow-2xl;
+    }
+    .quote-mark {
+      @apply absolute -top-6 -left-4 text-9xl font-serif text-blue-100 opacity-50;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+
+  <!-- Navbar -->
+  <nav class="bg-gradient-to-r from-gray-900 to-gray-800 shadow-2xl border-b border-gray-700">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <a href="#" id="logoLink" class="flex items-center space-x-3">
+                        <img src="images/lafarge-onboarding-app.png" alt="Onboarding Portal Logo" class="w-10 h-10">
+                        <span class="text-white font-bold text-xl tracking-tight">Onboarding Portal</span>
+                    </a>
+      <button onclick="logout()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:shadow-xl transition transform hover:scale-105">
+        Logout
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero Header -->
+  <header class="bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-800 shadow-2xl text-white py-20">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+      <h1 class="text-5xl md:text-6xl font-extrabold mb-6">
+        A Warm Welcome to Lafarge
+      </h1>
+      <p class="text-2xl opacity-95 max-w-4xl mx-auto leading-relaxed">
+        Messages from our leadership team to welcome you into the family
+      </p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-6 py-16">
+
+    <!-- Loading -->
+    <div id="loading" class="text-center py-24">
+      <div class="inline-flex items-center gap-4 text-blue-600">
+        <div class="animate-spin rounded-full h-14 w-14 border-4 border-blue-600 border-t-transparent"></div>
+        <span class="text-2xl font-bold">Loading your welcome messages...</span>
+      </div>
+    </div>
+
+    <!-- Error -->
+    <div id="error" class="hidden mb-12 bg-red-50 border-l-4 border-red-500 p-8 rounded-2xl shadow-lg">
+      <div class="flex items-start gap-4">
+        <svg class="w-8 h-8 text-red-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+        </svg>
+        <p class="text-red-800 font-semibold text-lg"></p>
+      </div>
+    </div>
+
+    <!-- CEO Welcome Card -->
+    <section id="ceoCard" class="hidden bg-white rounded-3xl shadow-2xl overflow-hidden card-hover border border-blue-100 mb-16">
+      <div class="md:flex">
+        <div class="md:w-1/3 relative overflow-hidden bg-gradient-to-br from-blue-500 to-indigo-600">
+          <img id="ceoImage" class="w-full h-full object-cover" alt="CEO Photo" style="display: none;">
+          <div id="ceoPlaceholder" class="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-blue-400 to-indigo-500 text-white text-3xl font-bold">
+            CEO
+          </div>
+        </div>
+        <div class="md:w-2/3 p-10 lg:p-14 relative">
+          <div class="quote-mark">“</div>
+          <p id="ceoMessage" class="text-gray-700 text-xl lg:text-2xl leading-relaxed mb-10 italic"></p>
+          <div class="text-right">
+            <p id="ceoName" class="text-3xl font-extrabold text-gray-900"></p>
+            <p id="ceoTitle" class="text-xl text-blue-600 font-medium mt-2"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HR Welcome Card -->
+    <section id="hrCard" class="hidden bg-white rounded-3xl shadow-2xl overflow-hidden card-hover border border-emerald-100">
+      <div class="md:flex">
+        <div class="md:w-1/3 relative overflow-hidden bg-gradient-to-br from-emerald-500 to-teal-600">
+          <img id="hrImage" class="w-full h-full object-cover" alt="HR Director Photo" style="display: none;">
+          <div id="hrPlaceholder" class="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-emerald-400 to-teal-500 text-white text-3xl font-bold">
+            HR
+          </div>
+        </div>
+        <div class="md:w-2/3 p-10 lg:p-14 relative">
+          <div class="quote-mark text-emerald-100">“</div>
+          <p id="hrMessage" class="text-gray-700 text-xl lg:text-2xl leading-relaxed mb-10 italic"></p>
+          <div class="text-right">
+            <p id="hrName" class="text-3xl font-extrabold text-gray-900"></p>
+            <p id="hrTitle" class="text-xl text-emerald-600 font-medium mt-2"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-24 py-12 bg-gray-900 text-white text-center">
+    <p class="text-lg font-medium">© 2025 Onboarding Portal • Welcome to the Lafarge Family</p>
+  </footer>
+
+  <!-- ORIGINAL JAVASCRIPT — 100% PRESERVED & FULLY WORKING -->
+  <script>
+    const userStr = localStorage.getItem('user');
+    if (!userStr) {
+        window.location.href = 'login.html';
+    } else {
+        try {
+            JSON.parse(userStr);
+        } catch (e) {
+            localStorage.removeItem('user');
+            window.location.href = 'login.html';
+        }
+    }
+
+    function logout() {
+        localStorage.clear();
+        window.location.href = 'login.html';
+    }
+    
+    async function getCEOImage() {
+        const baseUrl = 'https://onboardingservice-812204315267.europe-west1.run.app/api';
+        const token = localStorage.getItem('authToken');
+        const url = `${baseUrl}/Gallery/get-ceo-images`;
+        const headers = { 'accept': 'text/plain', ...(token && { 'Authorization': `Bearer ${token}` }) };
+        const response = await fetch(url, { headers });
+        if (!response.ok) throw new Error('Failed to load CEO image');
+        const data = await response.json();
+        return data.result[0]?.imageBase64;
+    }
+
+    async function getHRImage() {
+        const baseUrl = 'https://onboardingservice-812204315267.europe-west1.run.app/api';
+        const token = localStorage.getItem('authToken');
+        const url = `${baseUrl}/Gallery/get-hr-images`;
+        const headers = { 'accept': 'text/plain', ...(token && { 'Authorization': `Bearer ${token}` }) };
+        const response = await fetch(url, { headers });
+        if (!response.ok) throw new Error('Failed to load HR image');
+        const data = await response.json();
+        return data.result[0]?.imageBase64;
+    }
+
+    async function getWelcomeMessages() {
+        const baseUrl = 'https://onboardingservice-812204315267.europe-west1.run.app/api';
+        const token = localStorage.getItem('authToken');
+        const url = `${baseUrl}/Content/get-welcome-messages`;
+        const headers = { 'accept': 'text/plain', ...(token && { 'Authorization': `Bearer ${token}` }) };
+        const response = await fetch(url, { headers });
+        if (!response.ok) throw new Error(`Failed to load welcome messages: ${response.status}. ${await response.text()}`);
+        const jsonResponse = await response.json();
+        if (jsonResponse.isSuccessful && jsonResponse.result) {
+            return jsonResponse.result;
+        } else {
+            throw new Error(`Failed to load welcome messages: ${jsonResponse.message || 'Unknown error'}`);
+        }
+    }
+
+    function renderCEO(data, imageBase64) {
+        if (!data) return;
+        document.getElementById('ceoName').textContent = data.name || '';
+        document.getElementById('ceoTitle').textContent = data.title || '';
+        document.getElementById('ceoMessage').textContent = data.message || '';
+        if (imageBase64) {
+            document.getElementById('ceoImage').src = `data:image/png;base64,${imageBase64}`;
+            document.getElementById('ceoImage').style.display = 'block';
+            document.getElementById('ceoPlaceholder').style.display = 'none';
+        }
+        document.getElementById('ceoCard').style.display = 'flex';
+    }
+
+    function renderHR(data, imageBase64) {
+        if (!data) return;
+        document.getElementById('hrName').textContent = data.name || '';
+        document.getElementById('hrTitle').textContent = data.title || '';
+        document.getElementById('hrMessage').textContent = (data.message || '').replace('{Name}', 'New Team Member');
+        if (imageBase64) {
+            document.getElementById('hrImage').src = `data:image/jpeg;base64,${imageBase64}`;
+            document.getElementById('hrImage').style.display = 'block';
+            document.getElementById('hrPlaceholder').style.display = 'none';
+        }
+        document.getElementById('hrCard').style.display = 'flex';
+    }
+
+    function showError(message) {
+        document.getElementById('loading').style.display = 'none';
+        const errorDiv = document.getElementById('error');
+        errorDiv.querySelector('p') ? errorDiv.querySelector('p').textContent = message : 
+          errorDiv.innerHTML = `<p class="text-red-800 font-semibold text-lg">${message}</p>`;
+        errorDiv.style.display = 'block';
+    }
+
+    function setLogoLink() {
+        const logoLink = document.getElementById('logoLink');
+        if (!logoLink) return;
+
+        let userRole = '';
+        const userStr = localStorage.getItem('user');
+        if (userStr) {
+            try {
+                const user = JSON.parse(userStr);
+                userRole = user.role;
+            } catch (e) {
+                console.error("Error parsing user data from localStorage for logo link", e);
+                localStorage.removeItem('user');
+            }
+        }
+
+        if (userRole) {
+            const rolePage = `index-${userRole.toLowerCase().replace('_', '-')}.html`;
+            logoLink.href = rolePage;
+        } else {
+            logoLink.href = 'login.html';
+        }
+    }
+
+    window.addEventListener('load', async () => {
+        setLogoLink();
+        try {
+            const [ceoImage, hrImage, messages] = await Promise.all([
+                getCEOImage().catch(e => { console.error(e); return null; }),
+                getHRImage().catch(e => { console.error(e); return null; }),
+                getWelcomeMessages()
+            ]);
+            if (messages) {
+                renderCEO(messages.ceo, ceoImage);
+                renderHR(messages.hr, hrImage);
+            } else {
+                showError('Could not retrieve welcome messages.');
+            }
+        } catch (error) {
+            console.error('Error loading welcome page:', error);
+            showError(error.message);
+        } finally {
+            document.getElementById('loading').style.display = 'none';
+        }
+    });
+  </script>
+</body>
+</html>

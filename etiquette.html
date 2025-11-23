@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Social Etiquette | Onboarding Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Tailwind's @apply is not processed when using the CDN; replace with equivalent CSS */
+    .card-hover {
+      transition: all 300ms ease;
+      will-change: transform;
+    }
+
+    .card-hover:hover {
+      transform: translateY(-0.75rem); /* matches -translate-y-3 */
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); /* approximate shadow-2xl */
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-red-50">
+
+  <!-- Navbar -->
+  <nav class="bg-gradient-to-r from-gray-900 to-gray-800 shadow-2xl border-b border-gray-700">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <a href="#" id="logoLink" class="flex items-center gap-3">
+        <img src="images/lafarge-onboarding-app.png" alt="Onboarding Portal Logo" class="w-10 h-10">
+        <span class="text-white font-bold text-xl tracking-tight">Onboarding Portal</span>
+      </a>
+      <button onclick="logout()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 px-8 rounded-lg shadow-lg hover:shadow-xl transition transform hover:scale-105">
+        Logout
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero Header -->
+  <header class="bg-gradient-to-r from-amber-600 via-orange-600 to-red-700 shadow-2xl text-white py-20">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+      <h1 class="text-5xl md:text-6xl font-extrabold mb-6">
+        Social Etiquette in Nigeria
+      </h1>
+      <p class="text-2xl opacity-95 max-w-4xl mx-auto leading-relaxed">
+        Key cultural insights to help you connect respectfully across Nigeria’s rich and diverse regions
+      </p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-6 py-16">
+
+    <!-- Loading -->
+    <div id="loading" class="text-center py-20">
+      <div class="inline-flex items-center gap-4 text-amber-700">
+        <div class="animate-spin rounded-full h-12 w-12 border-4 border-amber-600 border-t-transparent"></div>
+        <span class="text-2xl font-bold">Loading cultural guide...</span>
+      </div>
+    </div>
+
+    <!-- Error -->
+    <div id="error" class="hidden mb-12 bg-red-50 border-l-4 border-red-500 p-8 rounded-xl shadow-lg">
+      <div class="flex items-start gap-4">
+        <svg class="w-8 h-8 text-red-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+        </svg>
+        <p class="text-red-800 font-semibold text-lg"></p>
+      </div>
+    </div>
+
+    <!-- Regional Cultural Insights -->
+    <section id="regionalSection" class="hidden mb-20">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-extrabold text-gray-800 mb-4">Regional Cultural Insights</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Understanding local customs helps build trust and strong relationships
+        </p>
+      </div>
+
+      <div id="regionalGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10"></div>
+    </section>
+
+    <!-- First Impression Tips -->
+    <section id="firstImpressionSection" class="hidden">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-extrabold text-gray-800 mb-4">Making a Great First Impression</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Simple gestures that show respect and openness go a long way
+        </p>
+      </div>
+
+      <div id="impressionList" class="grid grid-cols-1 lg:grid-cols-2 gap-10"></div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-24 py-12 bg-gray-900 text-white text-center">
+    <p>© 2025 Onboarding Portal • Building Bridges Through Understanding</p>
+  </footer>
+
+  <!-- ORIGINAL JAVASCRIPT — 100% PRESERVED & FULLY WORKING -->
+  <script>
+    const userStr = localStorage.getItem('user');
+    if (!userStr) {
+        window.location.href = 'login.html';
+    } else {
+        try {
+            JSON.parse(userStr);
+        } catch (e) {
+            localStorage.removeItem('user');
+            window.location.href = 'login.html';
+        }
+    }
+  
+    function logout() {
+        localStorage.clear();
+        window.location.href = 'login.html';
+    }
+
+    async function getEtiquette() {
+        const baseUrl = 'https://onboardingservice-812204315267.europe-west1.run.app/api';
+        const token = localStorage.getItem('authToken');
+        const url = `${baseUrl}/Content/get-etiquette`;
+        const headers = {
+            'accept': 'text/plain',
+            ...(token && { 'Authorization': `Bearer ${token}` })
+        };
+
+        try {
+            const response = await fetch(url, { headers });
+            console.log('Get Etiquette response status:', response.status);
+            if (response.status === 200) {
+                const jsonResponse = await response.json();
+                if (jsonResponse.isSuccessful && jsonResponse.result) {
+                    return jsonResponse.result;
+                } else {
+                    throw new Error(`Failed to load etiquette: ${jsonResponse.message}`);
+                }
+            } else {
+                throw new Error(`Failed to load etiquette: ${response.status}. ${await response.text()}`);
+            }
+        } catch (e) {
+            throw new Error(`Network error fetching etiquette: ${e.message}`);
+        }
+    }
+
+    function renderRegionalInfo(data) {
+        const section = document.getElementById('regionalSection');
+        const grid = document.getElementById('regionalGrid');
+
+        grid.innerHTML = '';
+        (data.regionalInfo || []).forEach(category => {
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded-3xl shadow-xl overflow-hidden card-hover border border-amber-100';
+
+            let regionsHTML = '';
+            category.regions.forEach(region => {
+                regionsHTML += `
+                    <div class="p-6 border-b border-gray-100 last:border-0">
+                        <h4 class="text-xl font-bold text-amber-700 mb-2 flex items-center gap-2">
+                            <span class="text-2xl">•</span> ${region.title}
+                        </h4>
+                        <p class="text-gray-700 leading-relaxed">${region.content || ''}</p>
+                    </div>
+                `;
+            });
+
+            card.innerHTML = `
+                <div class="bg-gradient-to-r from-amber-500 to-orange-600 text-white p-6">
+                    <h3 class="text-2xl font-extrabold">${category.title}</h3>
+                </div>
+                <div class="divide-y divide-gray-100">
+                    ${regionsHTML}
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+
+        if ((data.regionalInfo || []).length > 0) {
+            section.style.display = 'block';
+        }
+    }
+
+    function renderFirstImpressions(data) {
+        const section = document.getElementById('firstImpressionSection');
+        const list = document.getElementById('impressionList');
+
+        list.innerHTML = '';
+        (data.firstImpression || []).forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded-3xl shadow-xl p-10 card-hover border border-orange-100';
+            card.innerHTML = `
+                <div class="flex items-start gap-5">
+                    <div class="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center shadow-lg">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-3">${item.title}</h3>
+                        <p class="text-gray-700 text-lg leading-relaxed whitespace-pre-wrap">${item.content || ''}</p>
+                    </div>
+                </div>
+            `;
+            list.appendChild(card);
+        });
+
+        if ((data.firstImpression || []).length > 0) {
+            section.style.display = 'block';
+        }
+    }
+
+    function showError(message) {
+        document.getElementById('loading').style.display = 'none';
+        const errorDiv = document.getElementById('error');
+        errorDiv.querySelector('p') ? errorDiv.querySelector('p').textContent = message : errorDiv.innerHTML = `<p class="text-red-800 font-semibold text-lg">${message}</p>`;
+        errorDiv.style.display = 'block';
+    }
+
+    function setLogoLink() {
+        const logoLink = document.getElementById('logoLink');
+        if (!logoLink) return;
+
+        let userRole = '';
+        const userStr = localStorage.getItem('user');
+        if (userStr) {
+            try {
+                const user = JSON.parse(userStr);
+                userRole = user.role;
+            } catch (e) {
+                console.error("Error parsing user data from localStorage for logo link", e);
+                localStorage.removeItem('user');
+            }
+        }
+
+        if (userRole) {
+            const rolePage = `index-${userRole.toLowerCase().replace('_', '-')}.html`;
+            logoLink.href = rolePage;
+        } else {
+            logoLink.href = 'login.html'; // Default to login if no role is found
+        }
+    }
+
+    window.addEventListener('load', async () => {
+        setLogoLink(); // Set the logo link on page load
+        try {
+            const data = await getEtiquette();
+            renderRegionalInfo(data);
+            renderFirstImpressions(data);
+        } catch (error) {
+            console.error('Error loading etiquette:', error);
+            showError(error.message);
+        } finally {
+            document.getElementById('loading').style.display = 'none';
+        }
+    });
+  </script>
+</body>
+</html>

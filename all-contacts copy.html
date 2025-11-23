@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Contacts - Onboarding Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <nav class="bg-gray-800 text-white">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="#" class="font-bold text-xl">Onboarding</a>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                             <a href="index-hr-admin.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Dashboard</a>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <button onclick="logout()" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-gradient-to-r from-blue-500 to-blue-600 shadow">
+        <div class="container mx-auto px-4 py-6 text-white">
+            <h1 class="text-3xl font-bold">All Contacts</h1>
+            <p class="mt-2 opacity-90">Comprehensive directory of emergency, Lafarge, embassy, and HR contacts</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-6">
+        <div id="loading" class="text-center text-gray-600">Loading contacts...</div>
+        <div id="error" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert"></div>
+
+        <!-- Emergency Section -->
+        <div id="emergencySection" class="mt-6 bg-white p-6 rounded-lg shadow-md transition-transform duration-300 transform hover:-translate-y-1 hover:shadow-lg" style="display: none;">
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">Emergency Services</h2>
+            <div>
+                <ul id="emergencyList" class="divide-y divide-gray-200"></ul>
+                <div id="emergencyNoData" class="text-center text-gray-500 py-4" style="display: none;">No emergency information available.</div>
+            </div>
+        </div>
+
+        <!-- Lafarge Section -->
+        <div id="lafargeSection" class="mt-6 bg-white rounded-lg shadow-md transition-transform duration-300 transform hover:-translate-y-1 hover:shadow-lg" style="display: none;">
+            <h2 class="text-2xl font-semibold text-blue-600 p-6">Lafarge Contacts</h2>
+            <div class="overflow-x-auto">
+                <table id="lafargeTable" class="min-w-full divide-y divide-gray-200" style="display: none;">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Function</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lafargeBody" class="bg-white divide-y divide-gray-200"></tbody>
+                </table>
+                <div id="lafargeNoData" class="text-center text-gray-500 py-4" style="display: none;">No Lafarge contacts available.</div>
+            </div>
+        </div>
+
+        <!-- Embassies Section -->
+        <div id="embassiesSection" class="mt-6 bg-white p-6 rounded-lg shadow-md transition-transform duration-300 transform hover:-translate-y-1 hover:shadow-lg" style="display: none;">
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">Embassies</h2>
+            <div>
+                <div id="embassiesNoData" class="text-center text-gray-500">No embassy information available.</div>
+            </div>
+        </div>
+
+        <!-- HR Section -->
+        <div id="hrSection" class="mt-6 bg-white p-6 rounded-lg shadow-md transition-transform duration-300 transform hover:-translate-y-1 hover:shadow-lg" style="display: none;">
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">HR Contacts</h2>
+            <div>
+                <div id="hrNoData" class="text-center text-gray-500">No HR contacts available.</div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Inline the getAllContacts function
+        async function getAllContacts() {
+            const baseUrl = 'https://onboardingservice-812204315267.europe-west1.run.app/api';
+            const token = localStorage.getItem('authToken');
+            const url = `${baseUrl}/Contacts/get-all`;
+            const headers = {
+                'accept': 'text/plain',
+                ...(token && { 'Authorization': `Bearer ${token}` })
+            };
+            console.log('Get All Contacts request headers:', headers);
+
+            try {
+                const response = await fetch(url, { headers });
+                console.log('Get All Contacts response status:', response.status);
+                const jsonResponse = await response.json();
+                if (jsonResponse.isSuccessful && jsonResponse.result) {
+                    return jsonResponse.result;
+                } else {
+                    throw new Error(jsonResponse.Message || 'Failed to load all contacts');
+                }
+            } catch (e) {
+                console.log('Network error fetching all contacts:', e);
+                throw new Error(`Network error fetching all contacts: ${e.message}`);
+            }
+        }
+
+        // Function to render emergency
+        function renderEmergency(emergency) {
+            const list = document.getElementById('emergencyList');
+            const noData = document.getElementById('emergencyNoData');
+            const section = document.getElementById('emergencySection');
+
+            if (!emergency || emergency.length === 0) {
+                noData.style.display = 'block';
+                section.style.display = 'block'; // Show section to display 'no data' message
+                return;
+            }
+
+            list.innerHTML = '';
+            emergency.forEach(item => {
+                const li = document.createElement('li');
+                li.className = 'py-4 flex';
+                li.innerHTML = `
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-gray-900">${item.service}</p>
+                        <p class="text-sm text-gray-500">${item.info}</p>
+                    </div>
+                `;
+                list.appendChild(li);
+            });
+
+            section.style.display = 'block';
+        }
+
+        // Function to render Lafarge contacts
+        function renderLafarge(lafarge) {
+            const tbody = document.getElementById('lafargeBody');
+            const table = document.getElementById('lafargeTable');
+            const noData = document.getElementById('lafargeNoData');
+            const section = document.getElementById('lafargeSection');
+
+            if (!lafarge || lafarge.length === 0) {
+                noData.style.display = 'block';
+                section.style.display = 'block';
+                return;
+            }
+
+            tbody.innerHTML = '';
+            lafarge.forEach(contact => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${contact.function || ''}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${contact.name || ''}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600">
+                        ${contact.phone ? `<a href="tel:${contact.phone.replace(/\D/g, '')}" class="hover:underline">${contact.phone}</a>` : ''}
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            table.style.display = 'table';
+            section.style.display = 'block';
+        }
+
+        // Render empty sections
+        function renderEmptySections() {
+            document.getElementById('embassiesSection').style.display = 'block';
+            document.getElementById('hrSection').style.display = 'block';
+        }
+
+        // Function to show error
+        function showError(message) {
+            document.getElementById('loading').style.display = 'none';
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+
+        // Load contacts on page load
+        window.addEventListener('load', async () => {
+            try {
+                const contacts = await getAllContacts();
+                renderEmergency(contacts.emergency);
+                renderLafarge(contacts.lafarge);
+                renderEmptySections();
+            } catch (error) {
+                console.error('Error loading contacts:', error);
+                showError(error.message);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

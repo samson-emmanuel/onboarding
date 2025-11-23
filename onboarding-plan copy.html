@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Onboarding Plan - Onboarding Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+    <nav class="bg-gray-800 text-white">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="#" class="font-bold text-xl">Onboarding</a>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="index-hr-admin.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Dashboard</a>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <button onclick="logout()" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-white shadow">
+        <div class="container mx-auto px-4 py-6">
+            <h1 class="text-3xl font-bold text-gray-900">Onboarding Plan</h1>
+            <p class="text-gray-600 mt-2">Your structured guide to a successful start at Lafarge</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-6">
+        <div id="loading" class="text-center text-gray-600">Loading onboarding plan...</div>
+        <div id="error" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert"></div>
+
+        <!-- Buddy Section -->
+        <div id="buddySection" class="bg-white p-6 rounded-lg shadow-md mt-6" style="display: none;">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4 border-b pb-2">Onboarding Buddy Support</h2>
+            <div id="buddyDetails" class="text-gray-700 leading-relaxed whitespace-pre-wrap"></div>
+            <ul id="buddyActivities" class="list-disc list-inside mt-4 space-y-2" style="display: none;"></ul>
+        </div>
+
+        <!-- Checklist Section -->
+        <div id="checklistSection" class="bg-white p-6 rounded-lg shadow-md mt-6" style="display: none;">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4 border-b pb-2">Onboarding Checklist</h2>
+            <div id="checklistSummary" class="text-gray-700 leading-relaxed whitespace-pre-wrap mb-6"></div>
+            <div id="timeline" class="relative" style="display: none;">
+                <!-- Timeline items will be injected here by JS -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Logout function
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+
+        // Inline the getOnboardingPlan function
+        async function getOnboardingPlan() {
+            const baseUrl = 'https://onboardingservice-812204315267.europe-west1.run.app/api';
+            const token = localStorage.getItem('authToken');
+            const url = `${baseUrl}/Content/get-onboarding-plan`;
+            const headers = {
+                'accept': 'text/plain',
+                ...(token && { 'Authorization': `Bearer ${token}` })
+            };
+
+            try {
+                const response = await fetch(url, { headers });
+                if (!response.ok) {
+                    throw new Error(`Failed to load onboarding plan: ${response.status}. ${await response.text()}`);
+                }
+                const jsonResponse = await response.json();
+                if (jsonResponse.isSuccessful && jsonResponse.result) {
+                    return jsonResponse.result;
+                } else {
+                    throw new Error(`Failed to load onboarding plan: ${jsonResponse.message || 'Unknown error'}`);
+                }
+            } catch (e) {
+                throw new Error(`Network error fetching onboarding plan: ${e.message}`);
+            }
+        }
+
+        // Function to render buddy
+        function renderBuddy(data) {
+            if (!data) return;
+            const section = document.getElementById('buddySection');
+            const details = document.getElementById('buddyDetails');
+            const activitiesList = document.getElementById('buddyActivities');
+
+            details.textContent = data.details || '';
+            activitiesList.innerHTML = '';
+            (data.activities || []).forEach(activity => {
+                const li = document.createElement('li');
+                li.textContent = activity;
+                activitiesList.appendChild(li);
+            });
+            if ((data.activities || []).length > 0) activitiesList.style.display = 'block';
+
+            if (data.details || (data.activities || []).length > 0) {
+                section.style.display = 'block';
+            }
+        }
+
+        // Function to render checklist
+        function renderChecklist(data) {
+            if (!data) return;
+            const section = document.getElementById('checklistSection');
+            const summary = document.getElementById('checklistSummary');
+            const timelineDiv = document.getElementById('timeline');
+
+            summary.textContent = data.summary || '';
+            timelineDiv.innerHTML = '';
+
+            // Create the timeline line
+            const line = document.createElement('div');
+            line.className = 'absolute top-0 bottom-0 left-5 w-0.5 bg-blue-500';
+            timelineDiv.appendChild(line);
+
+            (data.timeline || []).forEach(periodData => {
+                const item = document.createElement('div');
+                item.className = 'relative pl-12 pb-8';
+                
+                let tasksHTML = '';
+                periodData.tasks.forEach(task => {
+                    tasksHTML += `<li class="text-gray-600">${task}</li>`;
+                });
+
+                item.innerHTML = `
+                    <div class="absolute left-0 top-1.5 w-5 h-5 bg-blue-500 rounded-full border-4 border-white"></div>
+                    <h3 class="font-bold text-blue-600 text-lg">${periodData.period}</h3>
+                    <ul class="list-disc list-inside mt-2 space-y-1">
+                        ${tasksHTML}
+                    </ul>
+                `;
+                timelineDiv.appendChild(item);
+            });
+
+            if (data.summary || (data.timeline || []).length > 0) {
+                timelineDiv.style.display = 'block';
+                section.style.display = 'block';
+            }
+        }
+
+        // Function to show error
+        function showError(message) {
+            document.getElementById('loading').style.display = 'none';
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        // Load data on page load
+        window.addEventListener('load', async () => {
+            try {
+                const data = await getOnboardingPlan();
+                if (data) {
+                    renderBuddy(data.buddy);
+                    renderChecklist(data.checklist);
+                } else {
+                    showError('No onboarding plan data received.');
+                }
+            } catch (error) {
+                console.error('Error loading onboarding plan:', error);
+                showError(error.message);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

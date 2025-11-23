@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Hire Information - Onboarding Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+    <nav class="bg-gray-800 text-white">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="#" id="logoLink" class="flex items-center space-x-3">
+                        <img src="images/lafarge-onboarding-app.png" alt="Onboarding Portal Logo" class="w-10 h-10">
+                        <span class="text-white font-bold text-xl tracking-tight">Onboarding Portal</span>
+                    </a>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="index-hr-admin.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Dashboard</a>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <button onclick="logout()" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-white shadow">
+        <div class="container mx-auto px-4 py-6">
+            <h1 class="text-3xl font-bold text-gray-900">Local Hire Information</h1>
+            <p class="text-gray-600 mt-2">Discover Lafarge Africa and insights into Nigeria</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-6">
+        <div id="loading" class="text-center text-gray-600">Loading local hire info...</div>
+        <div id="error" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert"></div>
+
+        <!-- General Intro Section -->
+        <div id="generalIntroSection" class="bg-white p-6 rounded-lg shadow-md mt-6" style="display: none;">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4 border-b pb-2">Introduction to Nigeria</h2>
+            <div id="introduction" class="text-gray-700 leading-relaxed whitespace-pre-wrap mb-6"></div>
+            <div id="countryFacts" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6"></div>
+            <div id="interestingFacts" class="space-y-4 mb-6"></div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-4">Public Holidays</h3>
+            <div class="overflow-x-auto">
+                <table id="holidaysTable" class="min-w-full divide-y divide-gray-200" style="display: none;">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Holiday</th>
+                        </tr>
+                    </thead>
+                    <tbody id="holidaysBody" class="bg-white divide-y divide-gray-200"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- About Lafarge Section -->
+        <div id="aboutLafargeSection" class="bg-white p-6 rounded-lg shadow-md mt-6" style="display: none;">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4 border-b pb-2">About Lafarge Africa</h2>
+            <div id="whoWeAre" class="text-gray-700 leading-relaxed whitespace-pre-wrap mb-6"></div>
+            <div id="footprintSummary" class="text-gray-700 leading-relaxed whitespace-pre-wrap mb-6"></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="subsection-header text-xl font-semibold text-gray-800 mb-4">Cement Plants</h3>
+                    <ul id="plantsList" class="list-disc list-inside space-y-2" style="display: none;"></ul>
+                </div>
+                <div>
+                    <h3 class="subsection-header text-xl font-semibold text-gray-800 mb-4">ReadyMix Locations</h3>
+                    <ul id="readyMixList" class="list-disc list-inside space-y-2" style="display: none;"></ul>
+                </div>
+            </div>
+             <div class="mt-6">
+                 <h3 class="subsection-header text-xl font-semibold text-gray-800 mb-4">Depots</h3>
+                 <div id="depots" class="text-gray-700" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Culture Section -->
+        <div id="cultureSection" class="bg-white p-6 rounded-lg shadow-md mt-6" style="display: none;">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4 border-b pb-2">Company Culture</h2>
+            <div id="cultureSummary" class="text-gray-700 leading-relaxed whitespace-pre-wrap mb-6"></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="subsection-header text-xl font-semibold text-gray-800 mb-4">Behavioural Pillars</h3>
+                    <ul id="pillarsList" class="list-disc list-inside space-y-2" style="display: none;"></ul>
+                </div>
+                <div>
+                    <h3 class="subsection-header text-xl font-semibold text-gray-800 mb-4">Huaxin Spirit</h3>
+                    <div id="huaxinSpirit" class="space-y-2" style="display: none;"></div>
+                </div>
+            </div>
+             <div class="mt-6">
+                <h3 class="subsection-header text-xl font-semibold text-gray-800 mb-4">Respectful Workplaces</h3>
+                <div id="respectfulWorkplaces" class="text-gray-700 leading-relaxed" style="display: none;"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const userStr = localStorage.getItem('user');
+        if (!userStr) {
+            window.location.href = 'login.html';
+        } else {
+            try {
+                JSON.parse(userStr);
+            } catch (e) {
+                localStorage.removeItem('user');
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+        
+        // Inline the getLocalHireInfo function
+        async function getLocalHireInfo() {
+            const baseUrl = 'https://onboardingservice-812204315267.europe-west1.run.app/api';
+            const token = localStorage.getItem('authToken');
+            const url = `${baseUrl}/Content/get-local-hire-info`;
+            const headers = { 'accept': 'text/plain', ...(token && { 'Authorization': `Bearer ${token}` }) };
+            const response = await fetch(url, { headers });
+            if (!response.ok) throw new Error(`Failed to load local hire info: ${response.status}. ${await response.text()}`);
+            const jsonResponse = await response.json();
+            if (jsonResponse.isSuccessful && jsonResponse.result) {
+                return jsonResponse.result;
+            } else {
+                throw new Error(`Failed to load local hire info: ${jsonResponse.message || 'Unknown error'}`);
+            }
+        }
+
+        // Render functions
+        function renderGeneralIntro(data) {
+            if (!data) return;
+            document.getElementById('introduction').textContent = data.introduction || '';
+            const countryFacts = document.getElementById('countryFacts');
+            countryFacts.innerHTML = '';
+            (data.countryFacts || []).forEach(fact => {
+                const item = document.createElement('div');
+                item.className = 'bg-gray-50 p-4 rounded-lg';
+                item.innerHTML = `<p class="font-semibold text-gray-600">${fact.label}</p><p class="text-lg text-gray-900">${fact.value}</p>`;
+                countryFacts.appendChild(item);
+            });
+            const interestingFacts = document.getElementById('interestingFacts');
+            interestingFacts.innerHTML = '';
+            (data.interestingFacts || []).forEach(fact => {
+                const div = document.createElement('div');
+                div.className = 'bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg';
+                div.textContent = fact;
+                interestingFacts.appendChild(div);
+            });
+            const holidaysBody = document.getElementById('holidaysBody');
+            holidaysBody.innerHTML = '';
+            (data.holidays || []).forEach(holiday => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${holiday.date}</td><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${holiday.name}</td>`;
+                holidaysBody.appendChild(row);
+            });
+            if ((data.holidays || []).length > 0) document.getElementById('holidaysTable').style.display = 'table';
+            document.getElementById('generalIntroSection').style.display = 'block';
+        }
+
+        function renderAboutLafarge(data) {
+            if (!data) return;
+            document.getElementById('whoWeAre').textContent = data.whoWeAre || '';
+            const footprint = data.footprint || {};
+            document.getElementById('footprintSummary').textContent = footprint.summary || '';
+            const plantsList = document.getElementById('plantsList');
+            plantsList.innerHTML = '';
+            (footprint.plants || []).forEach(plant => {
+                const li = document.createElement('li');
+                li.textContent = plant;
+                plantsList.appendChild(li);
+            });
+            if ((footprint.plants || []).length > 0) plantsList.style.display = 'block';
+            const readyMixList = document.getElementById('readyMixList');
+            readyMixList.innerHTML = '';
+            (footprint.readyMix || []).forEach(rm => {
+                const li = document.createElement('li');
+                li.textContent = rm;
+                readyMixList.appendChild(li);
+            });
+            if ((footprint.readyMix || []).length > 0) readyMixList.style.display = 'block';
+            document.getElementById('depots').textContent = footprint.depots || '';
+            if (footprint.depots) document.getElementById('depots').style.display = 'block';
+            document.getElementById('aboutLafargeSection').style.display = 'block';
+        }
+
+        function renderCulture(data) {
+            if (!data) return;
+            document.getElementById('cultureSummary').textContent = data.summary || '';
+            const pillars = (data.pillars || []).slice(0, 5).filter(p => p.trim());
+            const pillarsList = document.getElementById('pillarsList');
+            pillarsList.innerHTML = '';
+            pillars.forEach(pillar => {
+                const li = document.createElement('li');
+                li.textContent = pillar;
+                pillarsList.appendChild(li);
+            });
+            if (pillars.length > 0) pillarsList.style.display = 'block';
+            const huaxinSpiritItems = (data.huaxinSpirit || []).slice(0, 4).filter(p => p.trim() && p.includes(':'));
+            const huaxinSpirit = document.getElementById('huaxinSpirit');
+            huaxinSpirit.innerHTML = '';
+            huaxinSpiritItems.forEach(item => {
+                const p = document.createElement('p');
+                p.innerHTML = `<strong class="font-semibold">${item.split(':')[0]}:</strong> ${item.split(':').slice(1).join(':')}`;
+                huaxinSpirit.appendChild(p);
+            });
+            if (huaxinSpiritItems.length > 0) huaxinSpirit.style.display = 'block';
+            document.getElementById('respectfulWorkplaces').innerHTML = (data.respectfulWorkplaces || '').replace(/\n/g, '<br>');
+            if (data.respectfulWorkplaces) document.getElementById('respectfulWorkplaces').style.display = 'block';
+            document.getElementById('cultureSection').style.display = 'block';
+        }
+
+        // Function to show error
+        function showError(message) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error').textContent = message;
+            document.getElementById('error').style.display = 'block';
+        }
+
+        function setLogoLink() {
+            const logoLink = document.getElementById('logoLink');
+            if (!logoLink) return;
+
+            let userRole = '';
+            const userStr = localStorage.getItem('user');
+            if (userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    userRole = user.role;
+                } catch (e) {
+                    console.error("Error parsing user data from localStorage for logo link", e);
+                    localStorage.removeItem('user');
+                }
+            }
+
+            if (userRole) {
+                const rolePage = `index-${userRole.toLowerCase().replace('_', '-')}.html`;
+                logoLink.href = rolePage;
+            } else {
+                logoLink.href = 'login.html'; // Default to login if no role is found
+            }
+        }
+
+        // Load data on page load
+        window.addEventListener('load', async () => {
+            setLogoLink(); // Set the logo link on page load
+            try {
+                const data = await getLocalHireInfo();
+                if (data) {
+                    renderGeneralIntro(data.generalIntro);
+                    renderAboutLafarge(data.aboutLafarge);
+                    renderCulture(data.culture);
+                } else {
+                    showError('No local hire info data received.');
+                }
+            } catch (error) {
+                console.error('Error loading local hire info:', error);
+                showError(error.message);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        });
+
+    </script>
+</body>
+</html>

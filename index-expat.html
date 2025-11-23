@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expat Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <nav class="bg-gray-800 text-white">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="#" id="logoLink" class="flex items-center space-x-3">
+                        <img src="images/lafarge-onboarding-app.png" alt="Onboarding Portal Logo" class="w-10 h-10">
+                        <span class="text-white font-bold text-xl tracking-tight">Onboarding Portal</span>
+                    </a>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="onboarding-plan.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Onboarding Plan</a>
+                            <a href="local-contacts.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Local Contacts</a>
+                            <a href="etiquette.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Etiquette</a>
+                            <a href="#" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Nigeria Details</a>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <button onclick="logout()" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-gradient-to-r from-purple-500 to-purple-600 shadow">
+        <div class="container mx-auto px-4 py-6">
+            <div id="welcome" class="text-white"></div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container mx-auto px-4 py-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-md transition-transform duration-300 transform hover:-translate-y-1 hover:shadow-lg">
+                    <h2 class="text-xl font-bold mb-2 text-purple-600">Onboarding Plan</h2>
+                    <p class="text-gray-700 mb-4">Check your onboarding schedule and tasks.</p>
+                    <a href="onboarding-plan.html" class="text-purple-500 hover:underline">View Plan</a>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md transition-transform duration-300 transform hover:-translate-y-1 hover:shadow-lg">
+                    <h2 class="text-xl font-bold mb-2 text-purple-600">Local Contacts</h2>
+                    <p class="text-gray-700 mb-4">Find contact information for local services.</p>
+                    <a href="local-contacts.html" class="text-purple-500 hover:underline">View Contacts</a>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md transition-transform duration-300 transform hover:-translate-y-1 hover:shadow-lg">
+                    <h2 class="text-xl font-bold mb-2 text-purple-600">Etiquette Guide</h2>
+                    <p class="text-gray-700 mb-4">Learn about the local customs and workplace etiquette.</p>
+                    <a href="etiquette.html" class="text-purple-500 hover:underline">View Guide</a>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md transition-transform duration-300 transform hover:-translate-y-1 hover:shadow-lg">
+                    <h2 class="text-xl font-bold mb-2 text-purple-600">Nigeria Details</h2>
+                    <p class="text-gray-700 mb-4">Information about living and working in Nigeria.</p>
+                    <a href="#" class="text-purple-500 hover:underline">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let user;
+        let userStr = localStorage.getItem('user');
+
+        if (!userStr) {
+            const urlParams = new URLSearchParams(window.location.search);
+            userStr = urlParams.get('user');
+            if (userStr) {
+                try {
+                    user = JSON.parse(decodeURIComponent(userStr));
+                    localStorage.setItem('user', JSON.stringify(user)); // Save to localStorage
+                } catch (e) {
+                    console.error("Error parsing user data from URL", e);
+                    window.location.href = 'login.html';
+                }
+            } else {
+                window.location.href = 'login.html';
+            }
+        } else {
+            try {
+                user = JSON.parse(userStr);
+            } catch (e) {
+                console.error("Error parsing user data from localStorage", e);
+                localStorage.removeItem('user');
+                window.location.href = 'login.html';
+            }
+        }
+
+        if (!user || user.role !== 'Expat') {
+            window.location.href = 'login.html';
+        } else {
+            document.getElementById('welcome').innerHTML = `<h1 class="text-3xl font-bold">Welcome, ${user.firstName} ${user.lastName}!</h1><p>You are logged in as an Expat. Explore your personalized onboarding resources.</p>`;
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+
+        function setLogoLink() {
+            const logoLink = document.getElementById('logoLink');
+            if (!logoLink) return;
+
+            let userRole = '';
+            const userStr = localStorage.getItem('user');
+            if (userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    userRole = user.role;
+                } catch (e) {
+                    console.error("Error parsing user data from localStorage for logo link", e);
+                    localStorage.removeItem('user');
+                }
+            }
+
+            if (userRole) {
+                const rolePage = `index-${userRole.toLowerCase().replace('_', '-')}.html`;
+                logoLink.href = rolePage;
+            } else {
+                logoLink.href = 'login.html'; // Default to login if no role is found
+            }
+        }
+
+        // Call setLogoLink on page load
+        window.addEventListener('load', setLogoLink);
+    </script>
+</body>
+</html>

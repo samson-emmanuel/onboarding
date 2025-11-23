@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Onboarding Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-image: url('https://images.pexels.com/photos/1287145/pexels-photo-1287145.jpeg');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex items-center justify-center min-h-screen">
+        <div class="bg-white/90 backdrop-blur-sm p-8 rounded-lg shadow-md w-full max-w-md transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1">
+            <h1 class="text-2xl font-bold mb-6 text-center">Login to Onboarding Portal</h1>
+            <form id="loginForm">
+                <div class="mb-4">
+                    <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                    <input type="email" id="email" placeholder="Email" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                </div>
+                <div class="mb-6 relative">
+                    <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+                    <input type="password" id="password" placeholder="Password" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline pr-10">
+                    <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 pr-3 flex items-center pt-6 text-sm leading-5">
+                        <svg class="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path id="eyeOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path id="eyeOpen2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            <path id="eyeClosed" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 .993-3.111 3.568-5.613 6.643-6.915M2.458 12C3.732 7.943 7.523 5 12 5c.66 0 1.309.079 1.944.223M19.542 12c-.27-.803-.59-1.554-.95-2.247M12 5c.66 0 1.309.079 1.944.223M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 .993-3.111 3.568-5.613 6.643-6.915M2.458 12C3.732 7.943 7.523 5 12 5c.66 0 1.309.079 1.944.223M19.542 12c-.27-.803-.59-1.554-.95-2.247M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 .993-3.111 3.568-5.613 6.643-6.915M2.458 12C3.732 7.943 7.523 5 12 5c.66 0 1.309.079 1.944.223M19.542 12c-.27-.803-.59-1.554-.95-2.247M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 .993-3.111 3.568-5.613 6.643-6.915M2.458 12C3.732 7.943 7.523 5 12 5c.66 0 1.309.079 1.944.223M19.542 12c-.27-.803-.59-1.554-.95-2.247L12 12l.75.75L15 12m-6 0a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </button>
+                </div>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">Login</button>
+                <div id="loading" class="loading text-center mt-4" style="display: none;">Logging in...</div>
+                <div id="error" class="error text-red-500 mt-4 text-center"></div>
+            </form>
+            <div class="text-center mt-4">
+                <a href="forgot-password.html" class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
+                    Forgot Password?
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Inline the login function (from previous extraction)
+        async function login(email, password) {
+            const baseUrl = 'https://onboardingservice-812204315267.europe-west1.run.app/api';
+            const url = `${baseUrl}/Auth/login`;
+            const headers = { 'accept': 'text/plain', 'Content-Type': 'application/json' };
+            const body = JSON.stringify({ email, password });
+            console.log('Login payload:', body);
+
+            try {
+                const response = await fetch(url, { method: 'POST', headers, body });
+                console.log('Login response status:', response.status);
+                if (response.status === 200) {
+                    const apiResponse = await response.json();
+                    if (apiResponse.isSuccessful) {
+                        localStorage.setItem('authToken', apiResponse.result.token);
+                        localStorage.setItem('user', JSON.stringify(apiResponse.result.user));
+                    }
+                    return apiResponse;
+                } else {
+                    throw new Error(`Failed to login: ${response.status}. ${await response.text()}`);
+                }
+            } catch (e) {
+                throw new Error(`Network error during login: ${e.message}`);
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const loading = document.getElementById('loading');
+            const error = document.getElementById('error');
+
+            loading.style.display = 'block';
+            error.textContent = '';
+
+            try {
+                const response = await login(email, password);
+                if (response.isSuccessful) {
+                    const user = response.result.user;
+                    const role = user.role;
+                    // Redirect to role-specific index page
+                    window.location.href = `index-${role.toLowerCase().replace('_', '-')}.html?user=${encodeURIComponent(JSON.stringify(user))}`;
+                } else {
+                    error.textContent = response.message || 'Login failed';
+                }
+            } catch (err) {
+                error.textContent = err.message;
+            } finally {
+                loading.style.display = 'none';
+            }
+        });
+
+        // Password toggle functionality
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+        const eyeOpen = document.getElementById('eyeOpen');
+        const eyeOpen2 = document.getElementById('eyeOpen2');
+        const eyeClosed = document.getElementById('eyeClosed');
+
+
+        togglePassword.addEventListener('click', function() {
+            // Toggle the type attribute
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            // Toggle the eye icon
+            eyeOpen.classList.toggle('hidden');
+            eyeOpen2.classList.toggle('hidden');
+            eyeClosed.classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Etiquette - Onboarding Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <nav class="bg-gray-800 text-white">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="#" class="font-bold text-xl">Onboarding</a>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="index-hr-admin.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Dashboard</a>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <button onclick="logout()" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-gradient-to-r from-blue-500 to-blue-600 shadow">
+        <div class="container mx-auto px-4 py-6 text-white">
+            <h1 class="text-3xl font-bold">Social Etiquette</h1>
+            <p class="mt-2 opacity-90">Key cultural insights for Nigeria's diverse regions</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-6">
+        <div id="loading" class="text-center text-gray-600">Loading etiquette guide...</div>
+        <div id="error" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert"></div>
+
+        <!-- Regional Info Section -->
+        <div id="regionalSection" class="mt-6" style="display: none;">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Regional Cultural Insights</h2>
+            <div id="regionalGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
+
+        <!-- First Impression Section -->
+        <div id="firstImpressionSection" class="mt-10" style="display: none;">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Making a Great First Impression</h2>
+            <ul id="impressionList" class="space-y-4"></ul>
+        </div>
+    </main>
+    
+    <script>
+        // Logout function
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+        // Inline the getEtiquette function
+        async function getEtiquette() {
+            const baseUrl = 'https://onboardingservice-812204315267.europe-west1.run.app/api';
+            const token = localStorage.getItem('authToken');
+            const url = `${baseUrl}/Content/get-etiquette`;
+            const headers = {
+                'accept': 'text/plain',
+                ...(token && { 'Authorization': `Bearer ${token}` })
+            };
+
+            try {
+                const response = await fetch(url, { headers });
+                console.log('Get Etiquette response status:', response.status);
+                if (response.status === 200) {
+                    const jsonResponse = await response.json();
+                    if (jsonResponse.isSuccessful && jsonResponse.result) {
+                        return jsonResponse.result;
+                    } else {
+                        throw new Error(`Failed to load etiquette: ${jsonResponse.message}`);
+                    }
+                } else {
+                    throw new Error(`Failed to load etiquette: ${response.status}. ${await response.text()}`);
+                }
+            } catch (e) {
+                throw new Error(`Network error fetching etiquette: ${e.message}`);
+            }
+        }
+
+        // Function to render regional info
+        function renderRegionalInfo(data) {
+            const section = document.getElementById('regionalSection');
+            const grid = document.getElementById('regionalGrid');
+
+            grid.innerHTML = '';
+            (data.regionalInfo || []).forEach(category => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'bg-white p-6 rounded-lg shadow-md transition-transform duration-300 transform hover:-translate-y-1 hover:shadow-lg';
+                let regionsHTML = '';
+                category.regions.forEach(region => {
+                    regionsHTML += `
+                        <div class="mb-4 last:mb-0">
+                            <h4 class="font-semibold text-gray-800">${region.title}</h4>
+                            <p class="text-gray-600">${region.content || ''}</p>
+                        </div>
+                    `;
+                });
+                categoryDiv.innerHTML = `
+                    <h3 class="text-xl font-bold text-blue-600 mb-4 border-b pb-2">${category.title}</h3>
+                    ${regionsHTML}
+                `;
+                grid.appendChild(categoryDiv);
+            });
+
+            if ((data.regionalInfo || []).length > 0) {
+                section.style.display = 'block';
+            }
+        }
+
+        // Function to render first impressions
+        function renderFirstImpressions(data) {
+            const section = document.getElementById('firstImpressionSection');
+            const list = document.getElementById('impressionList');
+
+            list.innerHTML = '';
+            (data.firstImpression || []).forEach(item => {
+                const li = document.createElement('li');
+                li.className = 'bg-white p-6 rounded-lg shadow-md transition-transform duration-300 transform hover:-translate-y-1 hover:shadow-lg';
+                li.innerHTML = `
+                    <h3 class="text-xl font-bold text-blue-600 mb-2">${item.title}</h3>
+                    <p class="text-gray-600 whitespace-pre-wrap">${item.content || ''}</p>
+                `;
+                list.appendChild(li);
+            });
+
+            if ((data.firstImpression || []).length > 0) {
+                section.style.display = 'block';
+            }
+        }
+
+        // Function to show error
+        function showError(message) {
+            document.getElementById('loading').style.display = 'none';
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        // Load data on page load
+        window.addEventListener('load', async () => {
+            try {
+                const data = await getEtiquette();
+                renderRegionalInfo(data);
+                renderFirstImpressions(data);
+            } catch (error) {
+                console.error('Error loading etiquette:', error);
+                showError(error.message);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

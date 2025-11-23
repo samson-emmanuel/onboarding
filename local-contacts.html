@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Contacts - Onboarding Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+    <nav class="bg-gray-800 text-white">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="#" id="logoLink" class="flex items-center space-x-3">
+                        <img src="images/lafarge-onboarding-app.png" alt="Onboarding Portal Logo" class="w-10 h-10">
+                        <span class="text-white font-bold text-xl tracking-tight">Onboarding Portal</span>
+                    </a>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="index-hr-admin.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Dashboard</a>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <button onclick="logout()" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-white shadow">
+        <div class="container mx-auto px-4 py-6">
+            <h1 class="text-3xl font-bold text-gray-900">Local Contacts</h1>
+            <p class="text-gray-600 mt-2">Essential contacts for your onboarding in Nigeria</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-6">
+        <div id="loading" class="text-center text-gray-600">Loading contacts...</div>
+        <div id="error" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert"></div>
+        
+        <div class="bg-white shadow overflow-hidden rounded-lg">
+            <table id="contactsTable" class="min-w-full divide-y divide-gray-200" style="display: none;">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+                    </tr>
+                </thead>
+                <tbody id="contactsBody" class="bg-white divide-y divide-gray-200">
+                    <!-- Contact rows will be injected by JS -->
+                </tbody>
+            </table>
+            <div id="noData" class="text-center text-gray-500 py-10" style="display: none;">No contacts available at this time.</div>
+        </div>
+    </main>
+
+    <script>
+        const userStr = localStorage.getItem('user');
+        if (!userStr) {
+            window.location.href = 'login.html';
+        } else {
+            try {
+                JSON.parse(userStr);
+            } catch (e) {
+                localStorage.removeItem('user');
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+        
+        // Inline the getLocalContacts function
+        async function getLocalContacts() {
+            const baseUrl = 'https://onboardingservice-812204315267.europe-west1.run.app/api';
+            const token = localStorage.getItem('authToken');
+            const url = `${baseUrl}/Contacts/get-local`;
+            const headers = {
+                'accept': 'text/plain',
+                ...(token && { 'Authorization': `Bearer ${token}` })
+            };
+
+            try {
+                const response = await fetch(url, { headers });
+                if (!response.ok) {
+                    throw new Error(`Failed to load local contacts: ${response.status}. ${await response.text()}`);
+                }
+                const jsonResponse = await response.json();
+                if (jsonResponse.isSuccessful && Array.isArray(jsonResponse.result)) {
+                    return jsonResponse.result;
+                } else {
+                    throw new Error(`Failed to load local contacts: ${jsonResponse.message || 'Unknown error'}`);
+                }
+            } catch (e) {
+                throw new Error(`Network error fetching local contacts: ${e.message}`);
+            }
+        }
+
+        // Function to render contacts
+        function renderContacts(contacts) {
+            const tbody = document.getElementById('contactsBody');
+            const table = document.getElementById('contactsTable');
+            const noData = document.getElementById('noData');
+            const loading = document.getElementById('loading');
+
+            loading.style.display = 'none';
+
+            const validContacts = contacts.filter(c => c.name.trim() || c.email.trim() || c.phone.trim());
+
+            if (validContacts.length === 0) {
+                noData.style.display = 'block';
+                return;
+            }
+
+            tbody.innerHTML = '';
+            validContacts.forEach(contact => {
+                const row = document.createElement('tr');
+                row.className = "hover:bg-gray-50";
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${contact.name || ''}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${contact.email ? `<a href="mailto:${contact.email}" class="text-blue-600 hover:underline">${contact.email}</a>` : ''}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${contact.phone ? `<a href="tel:${contact.phone.replace(/\D/g, '')}" class="text-green-600 hover:underline">${contact.phone}</a>` : ''}
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            table.style.display = 'table';
+        }
+
+        // Function to show error
+        function showError(message) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error').textContent = message;
+            document.getElementById('error').style.display = 'block';
+        }
+
+        function setLogoLink() {
+            const logoLink = document.getElementById('logoLink');
+            if (!logoLink) return;
+
+            let userRole = '';
+            const userStr = localStorage.getItem('user');
+            if (userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    userRole = user.role;
+                } catch (e) {
+                    console.error("Error parsing user data from localStorage for logo link", e);
+                    localStorage.removeItem('user');
+                }
+            }
+
+            if (userRole) {
+                const rolePage = `index-${userRole.toLowerCase().replace('_', '-')}.html`;
+                logoLink.href = rolePage;
+            } else {
+                logoLink.href = 'login.html'; // Default to login if no role is found
+            }
+        }
+
+        // Load contacts on page load
+        window.addEventListener('load', async () => {
+            setLogoLink(); // Set the logo link on page load
+            try {
+                const contacts = await getLocalContacts();
+                renderContacts(contacts);
+            } catch (error) {
+                console.error('Error loading contacts:', error);
+                showError(error.message);
+            }
+        });
+    </script>
+</body>
+</html>
