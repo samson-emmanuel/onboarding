@@ -15,7 +15,10 @@
 
   <header class="bg-white shadow-sm border-b border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-      <h1 class="text-2xl font-bold text-gray-900">Upload Center</h1>
+      <a href="#" id="logoLink" class="flex items-center gap-3">
+          <img src="../images/lafarge-onboarding-app.png" alt="Onboarding Portal Logo" class="w-10 h-10">
+          <span class="text-gray-900 font-bold text-xl">Upload Center</span>
+      </a>
       <button onclick="logout()" class="inline-flex items-center gap-2 text-sm font-medium text-red-600 hover:text-red-700 transition">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -77,15 +80,40 @@
     </div>
   </div>
 
-<script>
+  <script>
+    function setLogoLink() {
+        const logoLink = document.getElementById('logoLink');
+        if (!logoLink) return;
+
+        let userRole = '';
+        const userStr = localStorage.getItem('user');
+        if (userStr) {
+            try {
+                const user = JSON.parse(userStr);
+                userRole = user.role;
+            } catch (e) {
+                console.error("Error parsing user data from localStorage for logo link", e);
+                localStorage.removeItem('user');
+            }
+        }
+
+        if (userRole) {
+            const rolePage = `index-${userRole.toLowerCase().replace('_', '-')}.html`;
+            logoLink.href = '../' + rolePage;
+        } else {
+            logoLink.href = '../index.html'; // Default to login if no role is found
+        }
+    }
+    window.addEventListener('load', setLogoLink);
+    
     function logout() {
         localStorage.clear();
-        window.location.href = '../index.html';
+        window.location.href = '../login.html';
     }
 
     const token = localStorage.getItem('authToken');
     if (!token) {
-        window.location.href = '../index.html';
+        window.location.href = '../login.html';
     }
 
     const formTemplates = {

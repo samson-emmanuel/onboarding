@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0a0a0a;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            background: #1a1a1a;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            opacity: 0.9;
+        }
+
+        .gallery-info {
+            padding: 1.5rem;
+        }
+
+        .gallery-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #4a90e2;
+        }
+
+        @media (max-width: 768px) {
+            .gallery {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Image Gallery</h1>
+    </header>
+
+    <main class="gallery">
+        <p class="text-center text-lg">Loading images...</p>
+    </main>
+
+    <div id="lightbox" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center hidden z-50">
+        <span id="close-lightbox" class="absolute top-4 right-6 text-white text-4xl cursor-pointer">&times;</span>
+        <img id="lightbox-img" src="" alt="Full-screen image" class="max-w-full max-h-full">
+    </div>
+
+    <script>
+        const galleryContainer = document.querySelector('.gallery');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const closeLightbox = document.getElementById('close-lightbox');
+
+        async function fetchImages() {
+            galleryContainer.innerHTML = '<p class="text-center text-lg">Loading images...</p>';
+            const token = localStorage.getItem('authToken');
+
+            if (!token) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            try {
+                const response = await fetch('https://onboardingservice-812204315267.europe-west1.run.app/api/Gallery/get-any-images', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.isSuccessful && data.result.length > 0) {
+                    galleryContainer.innerHTML = ''; // Clear loading message
+                    data.result.forEach(image => {
+                        const galleryItem = document.createElement('article');
+                        galleryItem.className = 'gallery-item';
+
+                        const imageNameWithoutExt = image.imageName.split('.').slice(0, -1).join('.');
+
+                        galleryItem.innerHTML = `
+                            <img src="data:image/jpeg;base64,${image.imageBase64}" alt="${imageNameWithoutExt}">
+                            <div class="gallery-info">
+                                <h3>${imageNameWithoutExt}</h3>
+                            </div>
+                        `;
+                        galleryContainer.appendChild(galleryItem);
+
+                        galleryItem.addEventListener('click', () => {
+                            lightboxImg.src = `data:image/jpeg;base64,${image.imageBase64}`;
+                            lightbox.classList.remove('hidden');
+                        });
+                    });
+                } else {
+                    galleryContainer.innerHTML = '<p class="text-center text-lg">No images found in the gallery.</p>';
+                }
+            } catch (error) {
+                console.error('Error fetching images:', error);
+                galleryContainer.innerHTML = '<p class="text-center text-lg text-red-500">Failed to load images. Please try again later.</p>';
+            }
+        }
+
+        closeLightbox.addEventListener('click', () => {
+            lightbox.classList.add('hidden');
+        });
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.classList.add('hidden');
+            }
+        });
+
+        window.addEventListener('load', fetchImages);
+    </script>
+</body>
+</html>
