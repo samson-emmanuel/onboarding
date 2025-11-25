@@ -200,7 +200,7 @@
         const url = `https://onboardingservice-812204315267.europe-west1.run.app/api/${endpoint}`;
         const formData = new FormData();
         files.forEach(file => formData.append(formDataKey, file));
-        const response = await fetch(url, { method: 'POST', headers: { 'accept': 'text/plain', 'Authorization': `Bearer ${token}` }, body: formData });
+        const response = await fetch(url, { method: 'POST', headers: { 'accept': 'text/plain' }, body: formData });
         if (!response.ok) throw new Error(`Upload failed: ${response.status}`);
         const data = await response.json();
         if (!data.isSuccessful) throw new Error(data.message || 'Upload failed');
