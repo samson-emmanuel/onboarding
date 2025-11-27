@@ -5,16 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HR Admin Dashboard | Onboarding Portal</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'deep-green': '#006400',
+            'light-green': '#008000',
+            'text-green': '#2E8B57',
+            'deep-red': '#8B0000',
+          }
+        }
+      }
+    }
+  </script>
   <style>
     .card-hover {
       @apply transition-all duration-300 transform hover:-translate-y-2 hover:shadow-2xl;
     }
   </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+<body class="min-h-screen bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300">
 
   <!-- Navbar -->
-  <nav class="bg-gradient-to-r from-gray-900 to-gray-800 shadow-xl border-b border-gray-700">
+  <nav class="bg-gradient-to-r from-deep-green to-light-green shadow-xl border-b border-gray-700">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
         <div class="flex items-center space-x-8">
@@ -25,17 +39,17 @@
 
           <!-- Desktop Navigation -->
           <div class="hidden lg:flex items-center space-x-1">
-            <a href="admin/user-registration.html" class="text-gray-300 hover:bg-gray-700 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition">Manage Users</a>
-            <a href="admin/uploads.html" class="text-gray-300 hover:bg-gray-700 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition">Uploads</a>
-            <a href="all-contacts.html" class="text-gray-300 hover:bg-gray-700 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition">Contacts</a>
-            <a href="onboarding-plan.html" class="text-gray-300 hover:bg-gray-700 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition">Onboarding Plan</a>
-            <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition">Reports</a>
+            <a href="admin/user-registration.html" class="text-white hover:bg-light-green hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition">Manage Users</a>
+            <a href="admin/uploads.html" class="text-white hover:bg-light-green hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition">Uploads</a>
+            <a href="all-contacts.html" class="text-white hover:bg-light-green hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition">Contacts</a>
+            <a href="onboarding-plan.html" class="text-white hover:bg-light-green hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition">Onboarding Plan</a>
+            <a href="#" class="text-white hover:bg-light-green hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition">Reports</a>
           </div>
         </div>
 
         <div class="flex items-center space-x-4">
           <span class="text-gray-400 text-sm hidden sm:block">HR Admin</span>
-          <button onclick="logout()" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2.5 px-6 rounded-lg shadow-md hover:shadow-lg transition transform hover:scale-105">
+          <button onclick="logout()" class="bg-deep-red hover:bg-deep-red text-white font-semibold py-2.5 px-6 rounded-lg shadow-md hover:shadow-lg transition transform hover:scale-105">
             Logout
           </button>
         </div>
@@ -44,7 +58,7 @@
   </nav>
 
   <!-- Hero Header -->
-  <header class="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 shadow-2xl">
+  <header class="bg-gradient-to-r from-deep-green via-light-green to-green-700 shadow-2xl">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div id="welcome" class="text-white">
         <!-- Filled by JS -->
@@ -58,7 +72,7 @@
       
       <!-- Card: Manage Users -->
       <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover border border-gray-100">
-        <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-6 text-white">
+        <div class="bg-gradient-to-r from-deep-green to-light-green p-6 text-white">
           <h2 class="text-2xl font-bold flex items-center gap-3">
             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H9a3 3 0 01-3-3v-1a5 5 0 0110 0v1a3 3 0 01-3 3z"/></svg>
             Manage Users
@@ -66,7 +80,7 @@
         </div>
         <div class="p-6">
           <p class="text-gray-600 mb-5">Add, edit, or remove user accounts and permissions.</p>
-          <a href="admin/user-registration.html" class="inline-flex items-center text-blue-600 font-semibold hover:text-blue-800 transition">
+          <a href="admin/user-registration.html" class="inline-flex items-center text-deep-green font-semibold hover:text-light-green transition">
             Go to User Management
             <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
           </a>
@@ -75,7 +89,7 @@
 
       <!-- Card: Uploads -->
       <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover border border-gray-100">
-        <div class="bg-gradient-to-r from-green-500 to-emerald-600 p-6 text-white">
+        <div class="bg-gradient-to-r from-deep-green to-light-green p-6 text-white">
           <h2 class="text-2xl font-bold flex items-center gap-3">
             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
             Uploads
@@ -83,7 +97,7 @@
         </div>
         <div class="p-6">
           <p class="text-gray-600 mb-5">Upload images, documents, and onboarding materials.</p>
-          <a href="admin/uploads.html" class="inline-flex items-center text-green-600 font-semibold hover:text-green-800 transition">
+          <a href="admin/uploads.html" class="inline-flex items-center text-deep-green font-semibold hover:text-light-green transition">
             Go to Upload Center
             <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
           </a>
@@ -92,7 +106,7 @@
 
       <!-- Card: Contacts Management -->
       <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover border border-gray-100">
-        <div class="bg-gradient-to-r from-purple-500 to-purple-600 p-6 text-white">
+        <div class="bg-gradient-to-r from-deep-green to-light-green p-6 text-white">
           <h2 class="text-2xl font-bold flex items-center gap-3">
             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
             Contacts
@@ -100,7 +114,7 @@
         </div>
         <div class="p-6">
           <p class="text-gray-600 mb-5">View and manage all company and local contacts.</p>
-          <a href="all-contacts.html" class="inline-flex items-center text-purple-600 font-semibold hover:text-purple-800 transition">
+          <a href="all-contacts.html" class="inline-flex items-center text-deep-green font-semibold hover:text-light-green transition">
             Manage Contacts
             <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
           </a>
@@ -109,7 +123,7 @@
 
       <!-- Card: Onboarding Plan -->
       <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover border border-gray-100">
-        <div class="bg-gradient-to-r from-orange-500 to-red-600 p-6 text-white">
+        <div class="bg-gradient-to-r from-deep-red to-red-700 p-6 text-white">
           <h2 class="text-2xl font-bold flex items-center gap-3">
             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
             Onboarding Plan
@@ -117,7 +131,7 @@
         </div>
         <div class="p-6">
           <p class="text-gray-600 mb-5">Edit and update the onboarding checklist and timeline.</p>
-          <a href="onboarding-plan.html" class="inline-flex items-center text-orange-600 font-semibold hover:text-orange-800 transition">
+          <a href="onboarding-plan.html" class="inline-flex items-center text-deep-red font-semibold hover:text-red-700 transition">
             Edit Plan
             <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
           </a>
@@ -126,7 +140,7 @@
 
       <!-- Card: Gallery -->
       <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover border border-gray-100">
-        <div class="bg-gradient-to-r from-yellow-500 to-yellow-600 p-6 text-white">
+        <div class="bg-gradient-to-r from-deep-green to-light-green p-6 text-white">
           <h2 class="text-2xl font-bold flex items-center gap-3">
             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
             Image Gallery
@@ -134,7 +148,7 @@
         </div>
         <div class="p-6">
           <p class="text-gray-600 mb-5">Browse and view company images.</p>
-          <a href="gallery.html" class="inline-flex items-center text-yellow-600 font-semibold hover:text-yellow-800 transition">
+          <a href="gallery.html" class="inline-flex items-center text-deep-green font-semibold hover:text-light-green transition">
             Go to Gallery
             <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
           </a>
@@ -143,7 +157,7 @@
 
       <!-- Card: Reports -->
       <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover border border-gray-100">
-        <div class="bg-gradient-to-r from-teal-500 to-cyan-600 p-6 text-white">
+        <div class="bg-gradient-to-r from-deep-green to-light-green p-6 text-white">
           <h2 class="text-2xl font-bold flex items-center gap-3">
             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 012-2h2a2 2 0 012 2v6m-6 0h6m6 0v-6a2 2 0 00-2-2h-2a2 2 0 00-2 2v6m6 0h-6"/></svg>
             Generate Reports
@@ -151,7 +165,7 @@
         </div>
         <div class="p-6">
           <p class="text-gray-600 mb-5">View analytics and progress reports for new hires.</p>
-          <a href="#" class="inline-flex items-center text-teal-600 font-semibold hover:text-teal-800 transition opacity-70 cursor-not-allowed">
+          <a href="#" class="inline-flex items-center text-deep-green font-semibold hover:text-light-green transition opacity-70 cursor-not-allowed">
             Coming Soon
             <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           </a>
@@ -159,10 +173,10 @@
       </div>
     </div>
   </main>
-
-  <!-- Footer -->
-  <footer class="mt-20 pb-10 text-center text-gray-500 text-sm">
-    <p>© 2025 Onboarding Portal • HR Admin Dashboard</p>
+  .
+  .
+  .
+        <p>© 2025 Onboarding Portal • HR Admin Dashboard</p>
   </footer>
 
   <!-- Original JavaScript — 100% preserved and functional -->
@@ -199,7 +213,7 @@
     } else {
         document.getElementById('welcome').innerHTML = `
           <h1 class="text-4xl font-extrabold mb-3">Welcome back, ${user.firstName} ${user.lastName}!</h1>
-          <p class="text-xl text-blue-100 opacity-90">You are logged in as <span class="font-semibold">HR Administrator</span>. Manage users, content, and onboarding resources.</p>
+          <p class="text-xl text-green-100 opacity-90">You are logged in as <span class="font-semibold">HR Administrator</span>. Manage users, content, and onboarding resources.</p>
         `;
     }
 
@@ -235,5 +249,4 @@
     // Call setLogoLink on page load
     window.addEventListener('load', setLogoLink);
   </script>
-</body>
-</html>
+</body></html>

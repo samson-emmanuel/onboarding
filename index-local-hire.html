@@ -5,9 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Local Hire Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                'deep-green': '#006400',
+                'light-green': '#008000',
+                'text-green': '#2E8B57',
+                'deep-red': '#8B0000',
+              }
+            }
+          }
+        }
+      </script>
 </head>
-<body class="bg-gray-50">
-    <nav class="bg-gray-800 text-white">
+<body class="bg-gray-200">
+    <nav class="bg-deep-green text-white">
         <div class="container mx-auto px-4">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
@@ -17,16 +31,16 @@
                     </a>
                     <div class="hidden md:block">
                         <div class="ml-10 flex items-baseline space-x-4">
-                            <a href="local-hire-info.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Local Hire Info</a>
-                            <a href="welcome-messages.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Welcome Messages</a>
-                            <a href="onboarding-plan.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Onboarding Plan</a>
-                            <a href="all-contacts.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">All Contacts</a>
-                            <a href="etiquette.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Etiquette Guide</a>
+                            <a href="local-hire-info.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-light-green">Local Hire Info</a>
+                            <a href="welcome-messages.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-light-green">Welcome Messages</a>
+                            <a href="onboarding-plan.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-light-green">Onboarding Plan</a>
+                            <a href="all-contacts.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-light-green">All Contacts</a>
+                            <a href="etiquette.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-light-green">Etiquette Guide</a>
                         </div>
                     </div>
                 </div>
                 <div>
-                    <button onclick="logout()" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                    <button onclick="logout()" class="bg-deep-red hover:bg-deep-red text-white font-bold py-2 px-4 rounded">
                         Logout
                     </button>
                 </div>
@@ -34,7 +48,7 @@
         </div>
     </nav>
 
-    <header class="bg-gradient-to-r from-green-500 to-green-600 shadow">
+    <header class="bg-gradient-to-r from-deep-green to-light-green shadow">
         <div class="container mx-auto px-4 py-6">
             <div id="welcome" class="text-white"></div>
         </div>
@@ -44,34 +58,34 @@
         <div class="container mx-auto px-4 py-6">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="bg-white p-6 rounded-lg shadow-md transition-transform duration-300 transform hover:-translate-y-1 hover:shadow-lg">
-                    <h2 class="text-xl font-bold mb-2 text-green-600">Local Hire Info</h2>
+                    <h2 class="text-xl font-bold mb-2 text-deep-green">Local Hire Info</h2>
                     <p class="text-gray-700 mb-4">Find information specifically for local hires.</p>
-                    <a href="local-hire-info.html" class="text-green-500 hover:underline">View Info</a>
+                    <a href="local-hire-info.html" class="text-deep-green hover:underline">View Info</a>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow-md transition-transform duration-300 transform hover:-translate-y-1 hover:shadow-lg">
-                    <h2 class="text-xl font-bold mb-2 text-green-600">Welcome Messages</h2>
+                    <h2 class="text-xl font-bold mb-2 text-deep-green">Welcome Messages</h2>
                     <p class="text-gray-700 mb-4">Read welcome messages from the team.</p>
-                    <a href="welcome-messages.html" class="text-green-500 hover:underline">View Messages</a>
+                    <a href="welcome-messages.html" class="text-deep-green hover:underline">View Messages</a>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow-md transition-transform duration-300 transform hover:-translate-y-1 hover:shadow-lg">
-                    <h2 class="text-xl font-bold mb-2 text-green-600">Onboarding Plan</h2>
+                    <h2 class="text-xl font-bold mb-2 text-deep-green">Onboarding Plan</h2>
                     <p class="text-gray-700 mb-4">Check your onboarding schedule and tasks.</p>
-                    <a href="onboarding-plan.html" class="text-green-500 hover:underline">View Plan</a>
+                    <a href="onboarding-plan.html" class="text-deep-green hover:underline">View Plan</a>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow-md transition-transform duration-300 transform hover:-translate-y-1 hover:shadow-lg">
-                    <h2 class="text-xl font-bold mb-2 text-green-600">All Contacts</h2>
+                    <h2 class="text-xl font-bold mb-2 text-deep-green">All Contacts</h2>
                     <p class="text-gray-700 mb-4">Find contact information for your colleagues.</p>
-                    <a href="all-contacts.html" class="text-green-500 hover:underline">View Contacts</a>
+                    <a href="all-contacts.html" class="text-deep-green hover:underline">View Contacts</a>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow-md transition-transform duration-300 transform hover:-translate-y-1 hover:shadow-lg">
-                    <h2 class="text-xl font-bold mb-2 text-green-600">Etiquette Guide</h2>
+                    <h2 class="text-xl font-bold mb-2 text-deep-green">Etiquette Guide</h2>
                     <p class="text-gray-700 mb-4">Learn about the local customs and workplace etiquette.</p>
-                    <a href="etiquette.html" class="text-green-500 hover:underline">View Guide</a>
+                    <a href="etiquette.html" class="text-deep-green hover:underline">View Guide</a>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow-md transition-transform duration-300 transform hover:-translate-y-1 hover:shadow-lg">
-                    <h2 class="text-xl font-bold mb-2 text-green-600">Image Gallery</h2>
+                    <h2 class="text-xl font-bold mb-2 text-deep-green">Image Gallery</h2>
                     <p class="text-gray-700 mb-4">Browse and view company images.</p>
-                    <a href="gallery.html" class="text-green-500 hover:underline">View Gallery</a>
+                    <a href="gallery.html" class="text-deep-green hover:underline">View Gallery</a>
                 </div>
             </div>
         </div>

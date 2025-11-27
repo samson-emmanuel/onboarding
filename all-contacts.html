@@ -5,24 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>All Contacts | Onboarding Portal</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'deep-green': '#006400',
+            'light-green': '#008000',
+            'text-green': '#2E8B57',
+            'deep-red': '#8B0000',
+          }
+        }
+      }
+    }
+  </script>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+<body class="min-h-screen bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300">
 
   <!-- Navbar -->
-  <nav class="bg-gradient-to-r from-gray-900 to-gray-800 shadow-xl">
+  <nav class="bg-gradient-to-r from-deep-green to-light-green shadow-xl">
     <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
       <a href="#" id="logoLink" class="flex items-center gap-3">
         <img src="images/lafarge-onboarding-app.png" alt="Onboarding Portal Logo" class="w-10 h-10">
         <span class="text-white font-bold text-xl">Onboarding Portal</span>
       </a>
-      <button onclick="logout()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 px-6 rounded-lg transition">
+      <button onclick="logout()" class="bg-deep-red hover:bg-deep-red text-white font-bold py-2.5 px-6 rounded-lg transition">
         Logout
       </button>
     </div>
   </nav>
 
   <!-- Header -->
-  <header class="bg-gradient-to-r from-blue-600 to-indigo-700 shadow-2xl text-white py-16">
+  <header class="bg-gradient-to-r from-deep-green via-light-green to-green-700 shadow-2xl text-white py-16">
     <div class="max-w-7xl mx-auto px-6 text-center">
       <h1 class="text-4xl md:text-5xl font-extrabold mb-4">All Contacts Directory</h1>
       <p class="text-xl opacity-90">Emergency services, Lafarge team, embassies, and HR support</p>
@@ -34,20 +48,20 @@
 
     <!-- Loading -->
     <div id="loading" class="text-center py-20">
-      <div class="inline-flex items-center gap-4 text-blue-600">
-        <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent"></div>
+      <div class="inline-flex items-center gap-4 text-deep-green">
+        <div class="animate-spin rounded-full h-12 w-12 border-4 border-deep-green border-t-transparent"></div>
         <span class="text-2xl font-medium">Loading contacts...</span>
       </div>
     </div>
 
     <!-- Error -->
-    <div id="error" class="hidden bg-red-50 border border-red-200 text-red-800 px-6 py-4 rounded-lg mb-8">
+    <div id="error" class="hidden bg-red-100 border border-deep-red text-deep-red px-6 py-4 rounded-lg mb-8">
       <strong>Error:</strong> <span></span>
     </div>
 
     <!-- Emergency -->
     <div id="emergencySection" class="hidden bg-white rounded-2xl shadow-xl overflow-hidden mb-10">
-      <div class="bg-gradient-to-r from-red-500 to-rose-600 text-white p-8">
+      <div class="bg-gradient-to-r from-deep-red to-red-700 text-white p-8">
         <h2 class="text-3xl font-bold">Emergency Services</h2>
       </div>
       <div class="p-8">
@@ -60,7 +74,7 @@
 
     <!-- Lafarge -->
     <div id="lafargeSection" class="hidden bg-white rounded-2xl shadow-xl overflow-hidden mb-10">
-      <div class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white p-8">
+      <div class="bg-gradient-to-r from-deep-green to-light-green text-white p-8">
         <h2 class="text-3xl font-bold">Lafarge Contacts</h2>
       </div>
       <div class="p-8">
@@ -68,9 +82,9 @@
           <table id="lafargeTable" class="min-w-full divide-y divide-gray-200 hidden">
             <thead class="bg-gray-50">
               <tr>
-                <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase">Function</th>
-                <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase">Name</th>
-                <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase">Phone</th>
+                <th class="px-6 py-4 text-left text-xs font-bold text-text-green uppercase">Function</th>
+                <th class="px-6 py-4 text-left text-xs font-bold text-text-green uppercase">Name</th>
+                <th class="px-6 py-4 text-left text-xs font-bold text-text-green uppercase">Phone</th>
               </tr>
             </thead>
             <tbody id="lafargeBody" class="divide-y divide-gray-200"></tbody>
@@ -84,14 +98,14 @@
 
     <!-- Coming Soon Sections -->
     <div id="embassiesSection" class="hidden bg-white rounded-2xl shadow-xl p-16 text-center mb-10">
-      <div class="bg-gradient-to-r from-purple-500 to-indigo-600 text-white p-8 rounded-2xl">
+      <div class="bg-gradient-to-r from-deep-green to-light-green text-white p-8 rounded-2xl">
         <h2 class="text-3xl font-bold">Embassies</h2>
         <p class="text-xl mt-4 opacity-90">Contact information coming soon</p>
       </div>
     </div>
 
     <div id="hrSection" class="hidden bg-white rounded-2xl shadow-xl p-16 text-center">
-      <div class="bg-gradient-to-r from-orange-500 to-amber-600 text-white p-8 rounded-2xl">
+      <div class="bg-gradient-to-r from-deep-green to-light-green text-white p-8 rounded-2xl">
         <h2 class="text-3xl font-bold">HR Contacts</h2>
         <p class="text-xl mt-4 opacity-90">HR team details coming soon</p>
       </div>
