@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Onboarding Login</title>
+    <link rel="stylesheet" href="style.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -21,7 +22,7 @@
       </script>
     <style>
         body {
-            background-image: url('images/background.png');
+            background-image: url('images/background.jpg');
             background-size: cover;
             background-position: center;
         }
@@ -51,14 +52,14 @@
                 <div id="loading" class="loading text-center mt-4" style="display: none;">Logging in...</div>
                 <div id="error" class="error text-deep-red mt-4 text-center"></div>
             </form>
-            <div class="text-center mt-4">
-                <a href="forgot-password.html" class="inline-block align-baseline font-bold text-sm text-deep-green hover:text-light-green">
+            <div class="text-center mt-4" style="visibility: visible; display: block;">
+                <a href="forgot-password.html" class="inline-block align-baseline font-bold text-sm text-deep-green hover:text-light-green" style="visibility: visible; display: inline-block;">
                     Forgot Password?
                 </a>
             </div>
-            <div class="flex justify-center items-center mt-6 space-x-4">
-                <img src="images/lafarge_logo.png" alt="Lafarge Logo" class="h-10">
-                <img src="images/huaxin_logo.png" alt="Huaxin Logo" class="h-10">
+            <div class="flex justify-between items-center mt-2">
+                <img src="images/lafarge_logo.png" alt="Lafarge Logo" class="h-8 index-logo">
+                <img src="images/huaxin_logo.png" alt="Huaxin Logo" class="h-8">
             </div>
         </div>
     </div>

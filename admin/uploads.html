@@ -121,15 +121,16 @@
         hr: { title: 'Upload HR Image', endpoint: 'Gallery/upload-hr-image', acceptedFiles: 'image/*', formDataKey: 'image', multiple: false },
         any: { title: 'Upload General Image', endpoint: 'Gallery/upload-any-image', acceptedFiles: 'image/*', formDataKey: 'image', multiple: false },
         'all-contacts': { title: 'Upload All Contacts', endpoint: 'Contacts/upload-all', acceptedFiles: '.csv,.xlsx,.xls', formDataKey: 'file', multiple: false, downloadUrl: 'Contacts/download-all-contacts-file-format' },
-        etiquette: { title: 'Upload Etiquette Guide', endpoint: 'Content/upload-etiquette', acceptedFiles: '.csv,.xlsx,.xls,.json', formDataKey: 'file', multiple: false },
-        'local-contacts': { title: 'Upload Local Contacts', endpoint: 'Contacts/upload-local', acceptedFiles: '.csv,.xlsx,.xls', formDataKey: 'file', multiple: false },
-        'local-hire-info': { title: 'Upload Local Hire Info', endpoint: 'Content/local-hire-info-upload', acceptedFiles: '.csv,.xlsx,.xls,.json', formDataKey: 'file', multiple: false },
-        'onboarding-plan': { title: 'Upload Onboarding Plan', endpoint: 'Content/upload-onboarding-plan', acceptedFiles: '.csv,.xlsx,.xls,.json', formDataKey: 'file', multiple: false },
-        'welcome-messages': { 
-            title: 'Upload Welcome Messages', 
-            endpoint: 'Content/upload-welcome-messages', 
+        'local-contacts': { title: 'Upload Local Contacts', endpoint: 'Contacts/upload-local', acceptedFiles: '.csv,.xlsx,.xls', formDataKey: 'file', multiple: false, downloadUrl: 'Contacts/download-local-contacts-file-format' },
+        etiquette: { title: 'Upload Etiquette Guide', endpoint: 'Content/upload-etiquette', acceptedFiles: '.csv,.xlsx,.xls,.json', formDataKey: 'file', multiple: false, downloadUrl: 'Content/download-etiquette-template' },
+        'local-hire-info': { title: 'Upload Local Hire Info', endpoint: 'Content/local-hire-info-upload', acceptedFiles: '.csv,.xlsx,.xls,.json', formDataKey: 'file', multiple: false, downloadUrl: 'Content/download-local-hire-info-template' },
+        'onboarding-plan': { title: 'Upload Onboarding Plan', endpoint: 'Content/upload-onboarding-plan', acceptedFiles: '.csv,.xlsx,.xls,.json', formDataKey: 'file', multiple: false, downloadUrl: 'Content/download-onboarding-plan-template' },
+        'welcome-messages': {
+            title: 'Upload Welcome Messages',
+            endpoint: 'Content/upload-welcome-messages',
             formDataKey: 'files',
-            customForm: true 
+            customForm: true,
+            downloadUrl: 'Content/download-welcome-messages-template'
         }
     };
 

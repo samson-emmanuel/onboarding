@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Audit Log Report | Onboarding Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                'deep-green': '#006400',
+                'light-green': '#008000',
+                'text-green': '#2E8B57',
+                'deep-red': '#8B0000',
+              }
+            }
+          }
+        }
+    </script>
+</head>
+<body class="min-h-screen bg-gray-100">
+
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="#" id="logoLink" class="flex items-center gap-3">
+                <img src="../images/lafarge-onboarding-app.png" alt="Onboarding Portal Logo" class="w-10 h-10">
+                <span class="text-gray-900 font-bold text-xl">Audit Log Report</span>
+            </a>
+            <div class="flex items-center space-x-4">
+                <a href="../index-hr-admin.html" class="text-sm font-medium text-gray-600 hover:text-deep-green">Dashboard</a>
+                <button onclick="logout()" class="inline-flex items-center gap-2 text-sm font-medium text-red-600 hover:text-red-700 transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Filter Report</h2>
+            
+            <!-- Filter Controls -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8 items-end">
+                <div>
+                    <label for="startDate" class="block text-sm font-medium text-gray-700">Start Date</label>
+                    <input type="date" id="startDate" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-deep-green focus:ring-deep-green sm:text-sm">
+                </div>
+                <div>
+                    <label for="endDate" class="block text-sm font-medium text-gray-700">End Date</label>
+                    <input type="date" id="endDate" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-deep-green focus:ring-deep-green sm:text-sm">
+                </div>
+                <div>
+                    <label for="pageNumber" class="block text-sm font-medium text-gray-700">Page</label>
+                    <input type="number" id="pageNumber" value="1" min="1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-deep-green focus:ring-deep-green sm:text-sm">
+                </div>
+                <div>
+                    <label for="pageSize" class="block text-sm font-medium text-gray-700">Page Size</label>
+                    <select id="pageSize" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-deep-green focus:ring-deep-green sm:text-sm">
+                        <option>10</option>
+                        <option>25</option>
+                        <option selected>50</option>
+                        <option>100</option>
+                    </select>
+                </div>
+                <div class="lg:col-span-1">
+                     <button id="fetchReport" class="w-full inline-flex items-center justify-center gap-2 bg-deep-green hover:bg-light-green text-white font-semibold py-2.5 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-3.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+                        Apply Filters
+                    </button>
+                </div>
+            </div>
+
+            <!-- Report Table -->
+            <div id="loading" class="text-center py-16" style="display: none;">
+                <div class="inline-flex items-center gap-4 text-deep-green">
+                    <div class="animate-spin rounded-full h-10 w-10 border-4 border-deep-green border-t-transparent"></div>
+                    <span class="text-xl font-medium">Loading Report...</span>
+                </div>
+            </div>
+            <div id="error" class="hidden bg-red-100 border border-deep-red text-deep-red px-6 py-4 rounded-lg text-center mb-6"></div>
+            
+            <div class="overflow-x-auto rounded-lg border">
+                <table id="reportTable" class="min-w-full divide-y divide-gray-200" style="display: none;">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase">Timestamp</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase">User</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase">Action</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase">Description</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reportBody" class="bg-white divide-y divide-gray-200">
+                    </tbody>
+                </table>
+            </div>
+            <div id="noData" class="text-center text-gray-500 py-16 text-lg" style="display: none;">No report data found for the selected criteria.</div>
+            
+            <!-- Pagination Info -->
+            <div id="paginationInfo" class="mt-4 text-sm text-gray-600 flex justify-between items-center">
+                <div id="page-details"></div>
+                <div id="total-records"></div>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        const userStr = localStorage.getItem('user');
+        const token = localStorage.getItem('authToken');
+
+        if (!userStr || !token) {
+            // If no user or token is found, redirect to login
+            window.location.href = '../index.html';
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = '../index.html';
+        }
+
+        function setLogoLink() {
+            const logoLink = document.getElementById('logoLink');
+            if (logoLink) {
+                logoLink.href = '../index-hr-admin.html';
+            }
+        }
+        
+        // The mock data now includes varied user IDs and roles to test filtering
+
+
+        async function getAuditLogs(params) {
+            // This function now makes a live API call to the real endpoint
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                console.error("Authentication token not found.");
+                throw new Error("Authentication token not found.");
+            }
+
+            const apiUrl = new URL('https://onboardingservice-812204315267.europe-west1.run.app/api/AuditLogs/get-audit-logs');
+            
+            // Append parameters to the URL if they exist
+            Object.keys(params).forEach(key => {
+                if (params[key] != null && params[key] !== '') {
+                    apiUrl.searchParams.append(key, params[key]);
+                }
+            });
+            // Add a cache-busting parameter
+            apiUrl.searchParams.append('_', new Date().getTime());
+
+            console.log('Fetching audit logs from URL:', apiUrl.toString());
+
+            const response = await fetch(apiUrl, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json'
+                }
+            });
+
+            console.log('API Response:', response);
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('API Error Response Text:', errorText);
+                throw new Error(`Failed to fetch audit logs: ${response.status} ${errorText}`);
+            }
+            
+            const data = await response.json();
+            console.log('Parsed API Data:', data);
+
+            if (!data.isSuccessful) {
+                console.error('API Data Indicates Failure:', data.message || 'An unknown error occurred.');
+                throw new Error(data.message || 'An unknown error occurred.');
+            }
+            return data.result;
+        }
+
+        function renderTable(logs) {
+            const tableBody = document.getElementById('reportBody');
+            const table = document.getElementById('reportTable');
+            const noData = document.getElementById('noData');
+            
+            tableBody.innerHTML = '';
+            if (!logs || logs.length === 0) {
+                table.style.display = 'none';
+                noData.style.display = 'block';
+                return;
+            }
+            
+            table.style.display = 'table';
+            noData.style.display = 'none';
+            
+            logs.forEach(log => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50';
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">${new Date(log.timestamp).toLocaleString()}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <div class="font-medium text-gray-900">${log.userName}</div>
+                        <div class="text-gray-500">${log.userRole}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${log.action}</td>
+                    <td class="px-6 py-4 text-sm text-gray-600 max-w-xs truncate" title="${log.description}">${log.description}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${log.status === 'SUCCESS' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                            ${log.status}
+                        </span>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+        
+        function renderPagination(result) {
+            const pageDetails = document.getElementById('page-details');
+            const totalRecords = document.getElementById('total-records');
+            if (result.totalCount > 0) {
+              pageDetails.textContent = `Page ${result.pageNumber} of ${result.totalPages}`;
+              totalRecords.textContent = `Total Records: ${result.totalCount}`;
+            } else {
+              pageDetails.textContent = '';
+              totalRecords.textContent = '';
+            }
+        }
+
+        async function fetchAndRenderLogs() {
+            const loading = document.getElementById('loading');
+            const errorDiv = document.getElementById('error');
+            const reportTable = document.getElementById('reportTable');
+            const noData = document.getElementById('noData');
+
+            loading.style.display = 'block';
+            errorDiv.style.display = 'none';
+            reportTable.style.display = 'none';
+            noData.style.display = 'none';
+            
+            try {
+                const user = JSON.parse(userStr);
+                const params = {
+                    startDate: document.getElementById('startDate').value,
+                    endDate: document.getElementById('endDate').value,
+                    pageNumber: document.getElementById('pageNumber').value,
+                    pageSize: document.getElementById('pageSize').value,
+                    // Use user data from localStorage for the API call
+                    userId: user?.id,
+                    userEmail: user?.email,
+                    userRole: user?.role
+                };
+                
+                const result = await getAuditLogs(params);
+                renderTable(result.content);
+                renderPagination(result);
+                
+            } catch (error) {
+                errorDiv.textContent = `Failed to load report: ${error.message}`;
+                errorDiv.style.display = 'block';
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setLogoLink();
+            document.getElementById('fetchReport').addEventListener('click', fetchAndRenderLogs);
+            
+            // Set default dates for the last month
+            const endDateInput = document.getElementById('endDate');
+            const startDateInput = document.getElementById('startDate');
+            const today = new Date();
+            endDateInput.value = today.toISOString().split('T')[0];
+            today.setMonth(today.getMonth() - 1);
+            startDateInput.value = today.toISOString().split('T')[0];
+
+            // Initial data load
+            fetchAndRenderLogs();
+        });
+    </script>
+</body>
+</html>
