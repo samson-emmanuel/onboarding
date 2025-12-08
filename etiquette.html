@@ -58,10 +58,10 @@
     }
   </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300">
+<body style="background-color: #000;">
 
   <!-- Navbar -->
-  <nav class="bg-gradient-to-r from-deep-green to-light-green shadow-2xl border-b border-gray-700">
+  <nav class="bg-gray-900 shadow-2xl border-b border-gray-700">
     <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
       <a href="#" id="logoLink" class="flex items-center gap-3">
         <img src="images/lafarge-onboarding-app.png" alt="Onboarding Portal Logo" class="w-10 h-10">
@@ -74,7 +74,7 @@
   </nav>
 
   <!-- Hero Header -->
-  <header class="bg-gradient-to-r from-deep-green via-light-green to-green-700 shadow-2xl text-white py-20">
+  <header class="bg-gray-900 shadow-2xl text-white py-20">
     <div class="max-w-7xl mx-auto px-6 text-center">
       <h1 class="text-5xl md:text-6xl font-extrabold mb-6">
         Social Etiquette in Nigeria
@@ -109,8 +109,8 @@
     <!-- Regional Cultural Insights -->
     <section id="regionalSection" class="hidden mb-20">
       <div class="text-center mb-12">
-        <h2 class="text-4xl font-extrabold text-gray-800 mb-4">Regional Cultural Insights</h2>
-        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        <h2 class="text-4xl font-extrabold text-white mb-4">Regional Cultural Insights</h2>
+        <p class="text-xl text-gray-400 max-w-3xl mx-auto">
           Understanding local customs helps build trust and strong relationships
         </p>
       </div>
@@ -122,8 +122,8 @@
     <!-- First Impression Tips -->
     <section id="firstImpressionSection" class="hidden">
       <div class="text-center mb-12">
-        <h2 class="text-4xl font-extrabold text-gray-800 mb-4">Making a Great First Impression</h2>
-        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        <h2 class="text-4xl font-extrabold text-white mb-4">Making a Great First Impression</h2>
+        <p class="text-xl text-gray-400 max-w-3xl mx-auto">
           Simple gestures that show respect and openness go a long way
         </p>
       </div>
@@ -135,7 +135,7 @@
   </main>
 
   <!-- Footer -->
-  <footer class="mt-24 py-12 bg-deep-green text-white text-center">
+  <footer class="mt-24 py-12 bg-gray-900 text-white text-center">
     <p>© 2025 Onboarding Portal • Building Bridges Through Understanding</p>
   </footer>
 
@@ -195,22 +195,22 @@
         grid.innerHTML = '';
         (data.regionalInfo || []).forEach(category => {
             const card = document.createElement('div');
-            card.className = 'bg-white rounded-3xl shadow-xl overflow-hidden card-hover border border-amber-100';
+            card.className = 'bg-gray-900 rounded-3xl shadow-xl overflow-hidden card-hover border border-gray-700';
 
             let regionsHTML = '';
             category.regions.forEach(region => {
                 regionsHTML += `
                     <div class="p-6 border-b border-gray-100 last:border-0">
-                        <h4 class="text-xl font-bold text-amber-700 mb-2 flex items-center gap-2">
+                        <h4 class="text-xl font-bold text-green-700 mb-2 flex items-center gap-2">
                             <span class="text-2xl">•</span> ${region.title}
                         </h4>
-                        <p class="text-gray-700 leading-relaxed">${region.content || ''}</p>
+                        <p class="text-gray-300 leading-relaxed">${region.content || ''}</p>
                     </div>
                 `;
             });
 
             card.innerHTML = `
-                <div class="bg-gradient-to-r from-amber-500 to-orange-600 text-white p-6">
+                <div class="bg-gradient-to-r from-deep-green to-light-green text-white p-6">
                     <h3 class="text-2xl font-extrabold">${category.title}</h3>
                 </div>
                 <div class="divide-y divide-gray-100">
@@ -233,17 +233,17 @@
         list.innerHTML = '';
         (data.firstImpression || []).forEach(item => {
             const card = document.createElement('div');
-            card.className = 'bg-white rounded-3xl shadow-xl p-10 card-hover border border-orange-100';
+            card.className = 'bg-gray-900 rounded-3xl shadow-xl p-10 card-hover border border-gray-700';
             card.innerHTML = `
                 <div class="flex items-start gap-5">
-                    <div class="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center shadow-lg">
+                    <div class="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-deep-green to-light-green rounded-full flex items-center justify-center shadow-lg">
                         <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-3">${item.title}</h3>
-                        <p class="text-gray-700 text-lg leading-relaxed whitespace-pre-wrap">${item.content || ''}</p>
+                        <h3 class="text-2xl font-bold text-white mb-3">${item.title}</h3>
+                        <p class="text-gray-300 text-lg leading-relaxed whitespace-pre-wrap">${item.content || ''}</p>
                     </div>
                 </div>
             `;

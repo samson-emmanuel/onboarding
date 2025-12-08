@@ -28,15 +28,15 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f3f4f6;
-            color: #1f2937;
+            background-color: #000;
+            color: #fff;
             line-height: 1.6;
         }
 
         .header {
             text-align: center;
             padding: 2rem;
-            background: linear-gradient(135deg, #006400 0%, #008000 100%);
+            background: #111;
             color: #ffffff;
         }
 
@@ -56,7 +56,7 @@
         }
 
         .gallery-item {
-            background: #ffffff;
+            background: #111;
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
@@ -88,7 +88,7 @@
         .gallery-info h3 {
             font-size: 1.2rem;
             margin-bottom: 0.5rem;
-            color: #006400;
+            color: #2E8B57;
         }
 
         @media (max-width: 768px) {
@@ -104,6 +104,17 @@
     </style>
 </head>
 <body>
+    <nav class="bg-gray-900 shadow-2xl">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+          <a href="#" id="logoLink" class="flex items-center gap-3">
+            <img src="images/lafarge-onboarding-app.png" alt="Onboarding Portal Logo" class="w-10 h-10">
+            <span class="text-white font-bold text-xl tracking-tight">Onboarding Portal</span>
+          </a>
+          <button onclick="logout()" class="bg-deep-red hover:bg-deep-red text-white font-bold py-2.5 px-8 rounded-lg transition transform hover:scale-105 shadow-lg">
+            Logout
+          </button>
+        </div>
+      </nav>
     <header class="header">
         <h1>Image Gallery</h1>
     </header>
@@ -186,6 +197,37 @@
         });
 
         window.addEventListener('load', fetchImages);
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+
+        function setLogoLink() {
+            const logoLink = document.getElementById('logoLink');
+            if (!logoLink) return;
+
+            let userRole = '';
+            const userStr = localStorage.getItem('user');
+            if (userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    userRole = user.role;
+                } catch (e) {
+                    console.error("Error parsing user data from localStorage for logo link", e);
+                    localStorage.removeItem('user');
+                }
+            }
+
+            if (userRole) {
+                const rolePage = `index-${userRole.toLowerCase().replace('_', '-')}.html`;
+                logoLink.href = rolePage;
+            } else {
+                logoLink.href = 'index.html'; // Default to login if no role is found
+            }
+        }
+
+        window.addEventListener('load', setLogoLink);
     </script>
 </body>
 </html>

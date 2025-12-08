@@ -4,249 +4,95 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HR Admin Dashboard | Onboarding Portal</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            'deep-green': '#006400',
-            'light-green': '#008000',
-            'text-green': '#2E8B57',
-            'deep-red': '#8B0000',
-          }
-        }
-      }
+  <link rel="stylesheet" href="style.css">
+<style>
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #1e1e1e;
+        color: #fff;
     }
-  </script>
-  <style>
-    .card-hover {
-      @apply transition-all duration-300 transform hover:-translate-y-2 hover:shadow-2xl;
+    .navbar a {
+        color: #fff;
+        text-decoration: none;
+        margin-left: 15px;
     }
-  </style>
+    .navbar .logo {
+        font-weight: bold;
+    }
+</style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300">
-
-  <!-- Navbar -->
-  <nav class="bg-gradient-to-r from-deep-green to-light-green shadow-xl border-b border-gray-700">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between items-center h-16">
-        <div class="flex items-center space-x-8">
-          <a href="#" id="logoLink" class="flex items-center space-x-3">
-            <img src="images/lafarge-onboarding-app.png" alt="Onboarding Portal Logo" class="w-10 h-10">
-            <span class="text-white font-bold text-xl tracking-tight">Onboarding Portal</span>
-          </a>
-
-          <!-- Desktop Navigation -->
-          <div class="hidden lg:flex items-center space-x-1">
-            <a href="admin/user-registration.html" class="text-white hover:bg-light-green hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition">Manage Users</a>
-            <a href="admin/uploads.html" class="text-white hover:bg-light-green hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition">Uploads</a>
-            <a href="all-contacts.html" class="text-white hover:bg-light-green hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition">Contacts</a>
-            <a href="onboarding-plan.html" class="text-white hover:bg-light-green hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition">Onboarding Plan</a>
-            <a href="admin/reports.html" class="text-white hover:bg-light-green hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition">Reports</a>
-          </div>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <a href="#" id="logoLink">Onboarding Portal</a>
         </div>
-
-        <div class="flex items-center space-x-4">
-          <span class="text-gray-400 text-sm hidden sm:block">HR Admin</span>
-          <button onclick="logout()" class="bg-deep-red hover:bg-deep-red text-white font-semibold py-2.5 px-6 rounded-lg shadow-md hover:shadow-lg transition transform hover:scale-105">
-            Logout
-          </button>
+        <div class="nav-links">
+            <a href="admin/user-registration.html">Manage Users</a>
+            <a href="admin/uploads.html">Uploads</a>
+            <a href="all-contacts.html">Contacts</a>
+            <a href="onboarding-plan.html">Onboarding Plan</a>
+            <a href="admin/reports.html">Reports</a>
+            <a href="#" onclick="logout()">Logout</a>
         </div>
-      </div>
     </div>
-  </nav>
-
-  <!-- Hero Header -->
-  <header class="bg-gradient-to-r from-deep-green via-light-green to-green-700 shadow-2xl">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div id="welcome" class="text-white">
-        <!-- Filled by JS -->
-      </div>
+    <div class="container">
+        <div class="welcome-card">
+            <div id="welcome"></div>
+        </div>
+        <!-- Card: Manage Users -->
+        <a href="admin/user-registration.html" class="card">
+            <h2>Manage Users</h2>
+            <div class="arrow">→</div>
+        </a>
+        <!-- Card: Uploads -->
+        <a href="admin/uploads.html" class="card">
+            <h2>Uploads</h2>
+            <div class="arrow">→</div>
+        </a>
+        <!-- Card: Contacts Management -->
+        <a href="all-contacts.html" class="card">
+            <h2>Contacts</h2>
+            <div class="arrow">→</div>
+        </a>
+        <!-- Card: Onboarding Plan -->
+        <a href="onboarding-plan.html" class="card">
+            <h2>Onboarding Plan</h2>
+            <div class="arrow">→</div>
+        </a>
+        <!-- Card: Gallery -->
+        <a href="gallery.html" class="card">
+            <h2>Image Gallery</h2>
+            <div class="arrow">→</div>
+        </a>
+        <!-- Card: Reports -->
+        <a href="admin/reports.html" class="card">
+            <h2>Generate Reports</h2>
+            <div class="arrow">→</div>
+        </a>
+        <!-- Card: Social Etiquette -->
+        <a href="etiquette.html" class="card">
+            <h2>Social Etiquette</h2>
+            <div class="arrow">→</div>
+        </a>
+        <!-- Card: Welcome Messages -->
+        <a href="welcome-messages.html" class="card">
+            <h2>Welcome Messages</h2>
+            <div class="arrow">→</div>
+        </a>
+        <!-- Card: Local Contacts -->
+        <a href="local-contacts.html" class="card">
+            <h2>Local Contacts</h2>
+            <div class="arrow">→</div>
+        </a>
+        <!-- Card: Local Hire Info -->
+        <a href="local-hire-info.html" class="card">
+            <h2>Local Hire Info</h2>
+            <div class="arrow">→</div>
+        </a>
     </div>
-  </header>
-
-  <!-- Main Content -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-      
-      <!-- Card: Manage Users -->
-      <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover border border-gray-100">
-        <div class="bg-gradient-to-r from-deep-green to-light-green p-6 text-white">
-          <h2 class="text-2xl font-bold flex items-center gap-3">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H9a3 3 0 01-3-3v-1a5 5 0 0110 0v1a3 3 0 01-3 3z"/></svg>
-            Manage Users
-          </h2>
-        </div>
-        <div class="p-6">
-          <p class="text-gray-600 mb-5">Add, edit, or remove user accounts and permissions.</p>
-          <a href="admin/user-registration.html" class="inline-flex items-center text-deep-green font-semibold hover:text-light-green transition">
-            Go to User Management
-            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </div>
-
-      <!-- Card: Uploads -->
-      <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover border border-gray-100">
-        <div class="bg-gradient-to-r from-deep-green to-light-green p-6 text-white">
-          <h2 class="text-2xl font-bold flex items-center gap-3">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
-            Uploads
-          </h2>
-        </div>
-        <div class="p-6">
-          <p class="text-gray-600 mb-5">Upload images, documents, and onboarding materials.</p>
-          <a href="admin/uploads.html" class="inline-flex items-center text-deep-green font-semibold hover:text-light-green transition">
-            Go to Upload Center
-            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </div>
-
-      <!-- Card: Contacts Management -->
-      <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover border border-gray-100">
-        <div class="bg-gradient-to-r from-deep-green to-light-green p-6 text-white">
-          <h2 class="text-2xl font-bold flex items-center gap-3">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-            Contacts
-          </h2>
-        </div>
-        <div class="p-6">
-          <p class="text-gray-600 mb-5">View and manage all company and local contacts.</p>
-          <a href="all-contacts.html" class="inline-flex items-center text-deep-green font-semibold hover:text-light-green transition">
-            Manage Contacts
-            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </div>
-
-      <!-- Card: Onboarding Plan -->
-      <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover border border-gray-100">
-        <div class="bg-gradient-to-r from-deep-red to-red-700 p-6 text-white">
-          <h2 class="text-2xl font-bold flex items-center gap-3">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-            Onboarding Plan
-          </h2>
-        </div>
-        <div class="p-6">
-          <p class="text-gray-600 mb-5">Edit and update the onboarding checklist and timeline.</p>
-          <a href="onboarding-plan.html" class="inline-flex items-center text-deep-red font-semibold hover:text-red-700 transition">
-            Edit Plan
-            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </div>
-
-      <!-- Card: Gallery -->
-      <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover border border-gray-100">
-        <div class="bg-gradient-to-r from-deep-green to-light-green p-6 text-white">
-          <h2 class="text-2xl font-bold flex items-center gap-3">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-            Image Gallery
-          </h2>
-        </div>
-        <div class="p-6">
-          <p class="text-gray-600 mb-5">Browse and view company images.</p>
-          <a href="gallery.html" class="inline-flex items-center text-deep-green font-semibold hover:text-light-green transition">
-            Go to Gallery
-            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </div>
-
-      <!-- Card: Reports -->
-      <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover border border-gray-100">
-        <div class="bg-gradient-to-r from-deep-green to-light-green p-6 text-white">
-          <h2 class="text-2xl font-bold flex items-center gap-3">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 012-2h2a2 2 0 012 2v6m-6 0h6m6 0v-6a2 2 0 00-2-2h-2a2 2 0 00-2 2v6m6 0h-6"/></svg>
-            Generate Reports
-          </h2>
-        </div>
-        <div class="p-6">
-          <p class="text-gray-600 mb-5">View analytics and progress reports for new hires.</p>
-          <a href="admin/reports.html" class="inline-flex items-center text-deep-green font-semibold hover:text-light-green transition">
-            View Reports
-            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </div>
-
-      <!-- Card: Social Etiquette -->
-      <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover border border-gray-100">
-        <div class="bg-gradient-to-r from-deep-green to-light-green p-6 text-white">
-          <h2 class="text-2xl font-bold flex items-center gap-3">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18c-2.305 0-4.408.867-6 2.292m0-14.25v14.25"></path></svg>
-            Social Etiquette
-          </h2>
-        </div>
-        <div class="p-6">
-          <p class="text-gray-600 mb-5">View the social etiquette guide for Nigeria.</p>
-          <a href="etiquette.html" class="inline-flex items-center text-deep-green font-semibold hover:text-light-green transition">
-            View Etiquette Guide
-            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </div>
-
-      <!-- Card: Welcome Messages -->
-      <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover border border-gray-100">
-        <div class="bg-gradient-to-r from-deep-green to-light-green p-6 text-white">
-          <h2 class="text-2xl font-bold flex items-center gap-3">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"></path></svg>
-            Welcome Messages
-          </h2>
-        </div>
-        <div class="p-6">
-          <p class="text-gray-600 mb-5">Read welcome messages from the leadership team.</p>
-          <a href="welcome-messages.html" class="inline-flex items-center text-deep-green font-semibold hover:text-light-green transition">
-            View Messages
-            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </div>
-
-      <!-- Card: Local Contacts -->
-      <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover border border-gray-100">
-        <div class="bg-gradient-to-r from-deep-green to-light-green p-6 text-white">
-          <h2 class="text-2xl font-bold flex items-center gap-3">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-            Local Contacts
-          </h2>
-        </div>
-        <div class="p-6">
-          <p class="text-gray-600 mb-5">Access contact information for local new hires.</p>
-          <a href="local-contacts.html" class="inline-flex items-center text-deep-green font-semibold hover:text-light-green transition">
-            View Local Contacts
-            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </div>
-
-      <!-- Card: Local Hire Info -->
-      <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover border border-gray-100">
-        <div class="bg-gradient-to-r from-deep-green to-light-green p-6 text-white">
-          <h2 class="text-2xl font-bold flex items-center gap-3">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            Local Hire Info
-          </h2>
-        </div>
-        <div class="p-6">
-          <p class="text-gray-600 mb-5">Information and resources for local new hires.</p>
-          <a href="local-hire-info.html" class="inline-flex items-center text-deep-green font-semibold hover:text-light-green transition">
-            View Local Hire Info
-            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  .
-  .
-  .
-        <p>© 2025 Onboarding Portal • HR Admin Dashboard</p>
-  </footer>
 
   <!-- Original JavaScript — 100% preserved and functional -->
   <script>
@@ -281,8 +127,8 @@
         window.location.href = 'index.html';
     } else {
         document.getElementById('welcome').innerHTML = `
-          <h1 class="text-4xl font-extrabold mb-3">Welcome back, ${user.firstName} ${user.lastName}!</h1>
-          <p class="text-xl text-green-100 opacity-90">You are logged in as <span class="font-semibold">HR Administrator</span>. Manage users, content, and onboarding resources.</p>
+          <h1>Welcome back, ${user.firstName} ${user.lastName}!</h1>
+          <p>You are logged in as <span>HR Administrator</span>. Manage users, content, and onboarding resources.</p>
         `;
     }
 

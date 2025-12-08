@@ -19,18 +19,23 @@
           }
         }
     </script>
+    <style>
+        body {
+            background-color: #000;
+        }
+    </style>
 </head>
-<body class="min-h-screen bg-gray-100">
+<body style="background-color: #000;">
 
-    <header class="bg-white shadow-sm border-b border-gray-200">
+    <header class="bg-gray-900 shadow-sm border-b border-gray-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
             <a href="#" id="logoLink" class="flex items-center gap-3">
                 <img src="../images/lafarge-onboarding-app.png" alt="Onboarding Portal Logo" class="w-10 h-10">
-                <span class="text-gray-900 font-bold text-xl">Audit Log Report</span>
+                <span class="text-white font-bold text-xl">Audit Log Report</span>
             </a>
             <div class="flex items-center space-x-4">
-                <a href="../index-hr-admin.html" class="text-sm font-medium text-gray-600 hover:text-deep-green">Dashboard</a>
-                <button onclick="logout()" class="inline-flex items-center gap-2 text-sm font-medium text-red-600 hover:text-red-700 transition">
+                <a href="../index-hr-admin.html" class="text-sm font-medium text-gray-300 hover:text-green-500">Dashboard</a>
+                <button onclick="logout()" class="inline-flex items-center gap-2 text-sm font-medium text-red-500 hover:text-red-400 transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
                     Logout
                 </button>
@@ -39,26 +44,26 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Filter Report</h2>
+        <div class="bg-gray-900 rounded-2xl shadow-lg border border-gray-700 p-8">
+            <h2 class="text-2xl font-bold text-white mb-6">Filter Report</h2>
             
             <!-- Filter Controls -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8 items-end">
                 <div>
-                    <label for="startDate" class="block text-sm font-medium text-gray-700">Start Date</label>
-                    <input type="date" id="startDate" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-deep-green focus:ring-deep-green sm:text-sm">
+                    <label for="startDate" class="block text-sm font-medium text-gray-300">Start Date</label>
+                    <input type="date" id="startDate" class="mt-1 block w-full rounded-md bg-gray-800 border-gray-600 text-white shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm">
                 </div>
                 <div>
-                    <label for="endDate" class="block text-sm font-medium text-gray-700">End Date</label>
-                    <input type="date" id="endDate" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-deep-green focus:ring-deep-green sm:text-sm">
+                    <label for="endDate" class="block text-sm font-medium text-gray-300">End Date</label>
+                    <input type="date" id="endDate" class="mt-1 block w-full rounded-md bg-gray-800 border-gray-600 text-white shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm">
                 </div>
                 <div>
-                    <label for="pageNumber" class="block text-sm font-medium text-gray-700">Page</label>
-                    <input type="number" id="pageNumber" value="1" min="1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-deep-green focus:ring-deep-green sm:text-sm">
+                    <label for="pageNumber" class="block text-sm font-medium text-gray-300">Page</label>
+                    <input type="number" id="pageNumber" value="1" min="1" class="mt-1 block w-full rounded-md bg-gray-800 border-gray-600 text-white shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm">
                 </div>
                 <div>
-                    <label for="pageSize" class="block text-sm font-medium text-gray-700">Page Size</label>
-                    <select id="pageSize" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-deep-green focus:ring-deep-green sm:text-sm">
+                    <label for="pageSize" class="block text-sm font-medium text-gray-300">Page Size</label>
+                    <select id="pageSize" class="mt-1 block w-full rounded-md bg-gray-800 border-gray-600 text-white shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm">
                         <option>10</option>
                         <option>25</option>
                         <option selected>50</option>
@@ -66,7 +71,7 @@
                     </select>
                 </div>
                 <div class="lg:col-span-1">
-                     <button id="fetchReport" class="w-full inline-flex items-center justify-center gap-2 bg-deep-green hover:bg-light-green text-white font-semibold py-2.5 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
+                     <button id="fetchReport" class="w-full inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-3.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
                         Apply Filters
                     </button>
@@ -75,32 +80,32 @@
 
             <!-- Report Table -->
             <div id="loading" class="text-center py-16" style="display: none;">
-                <div class="inline-flex items-center gap-4 text-deep-green">
-                    <div class="animate-spin rounded-full h-10 w-10 border-4 border-deep-green border-t-transparent"></div>
+                <div class="inline-flex items-center gap-4 text-green-500">
+                    <div class="animate-spin rounded-full h-10 w-10 border-4 border-green-500 border-t-transparent"></div>
                     <span class="text-xl font-medium">Loading Report...</span>
                 </div>
             </div>
-            <div id="error" class="hidden bg-red-100 border border-deep-red text-deep-red px-6 py-4 rounded-lg text-center mb-6"></div>
+            <div id="error" class="hidden bg-red-900 border border-red-700 text-red-300 px-6 py-4 rounded-lg text-center mb-6"></div>
             
-            <div class="overflow-x-auto rounded-lg border">
-                <table id="reportTable" class="min-w-full divide-y divide-gray-200" style="display: none;">
-                    <thead class="bg-gray-50">
+            <div class="overflow-x-auto rounded-lg border border-gray-700">
+                <table id="reportTable" class="min-w-full divide-y divide-gray-700" style="display: none;">
+                    <thead class="bg-gray-800">
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase">Timestamp</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase">User</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase">Action</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase">Description</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase">Status</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase">Timestamp</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase">User</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase">Action</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase">Description</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase">Status</th>
                         </tr>
                     </thead>
-                    <tbody id="reportBody" class="bg-white divide-y divide-gray-200">
+                    <tbody id="reportBody" class="bg-gray-900 divide-y divide-gray-700">
                     </tbody>
                 </table>
             </div>
             <div id="noData" class="text-center text-gray-500 py-16 text-lg" style="display: none;">No report data found for the selected criteria.</div>
             
             <!-- Pagination Info -->
-            <div id="paginationInfo" class="mt-4 text-sm text-gray-600 flex justify-between items-center">
+            <div id="paginationInfo" class="mt-4 text-sm text-gray-400 flex justify-between items-center">
                 <div id="page-details"></div>
                 <div id="total-records"></div>
             </div>

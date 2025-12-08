@@ -4,86 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expat Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-          theme: {
-            extend: {
-              colors: {
-                'deep-green': '#006400',
-                'light-green': '#008000',
-                'text-green': '#2E8B57',
-                'deep-red': '#8B0000',
-              }
-            }
-          }
-        }
-      </script>
+    <link rel="stylesheet" href="style.css">
+<style>
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #1e1e1e;
+        color: #fff;
+    }
+    .navbar a {
+        color: #fff;
+        text-decoration: none;
+        margin-left: 15px;
+    }
+    .navbar .logo {
+        font-weight: bold;
+    }
+</style>
 </head>
-<body class="bg-gray-200">
-    <nav class="bg-deep-green text-white">
-        <div class="container mx-auto px-4">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex items-center">
-                    <a href="#" id="logoLink" class="flex items-center space-x-3">
-                        <img src="images/lafarge-onboarding-app.png" alt="Onboarding Portal Logo" class="w-10 h-10">
-                        <span class="text-white font-bold text-xl tracking-tight">Onboarding Portal</span>
-                    </a>
-                    <div class="hidden md:block">
-                        <div class="ml-10 flex items-baseline space-x-4">
-                            <a href="onboarding-plan.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-light-green">Onboarding Plan</a>
-                            <a href="local-contacts.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-light-green">Local Contacts</a>
-                            <a href="etiquette.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-light-green">Etiquette</a>
-                            <a href="#" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-light-green">Nigeria Details</a>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <button onclick="logout()" class="bg-deep-red hover:bg-deep-red text-white font-bold py-2 px-4 rounded">
-                        Logout
-                    </button>
-                </div>
-            </div>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <a href="#" id="logoLink">Onboarding Portal</a>
         </div>
-    </nav>
-
-    <header class="bg-gradient-to-r from-deep-green to-light-green shadow">
-        <div class="container mx-auto px-4 py-6">
-            <div id="welcome" class="text-white"></div>
+        <div class="nav-links">
+            <a href="onboarding-plan.html">Onboarding Plan</a>
+            <a href="local-contacts.html">Local Contacts</a>
+            <a href="etiquette.html">Etiquette</a>
+            <a href="#">Nigeria Details</a>
+            <a href="#" onclick="logout()">Logout</a>
         </div>
-    </header>
-
-    <main>
-        <div class="container mx-auto px-4 py-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-lg shadow-md transition-transform duration-300 transform hover:-translate-y-1 hover:shadow-lg">
-                    <h2 class="text-xl font-bold mb-2 text-deep-green">Onboarding Plan</h2>
-                    <p class="text-gray-700 mb-4">Check your onboarding schedule and tasks.</p>
-                    <a href="onboarding-plan.html" class="text-deep-green hover:underline">View Plan</a>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md transition-transform duration-300 transform hover:-translate-y-1 hover:shadow-lg">
-                    <h2 class="text-xl font-bold mb-2 text-deep-green">Local Contacts</h2>
-                    <p class="text-gray-700 mb-4">Find contact information for local services.</p>
-                    <a href="local-contacts.html" class="text-deep-green hover:underline">View Contacts</a>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md transition-transform duration-300 transform hover:-translate-y-1 hover:shadow-lg">
-                    <h2 class="text-xl font-bold mb-2 text-deep-green">Etiquette Guide</h2>
-                    <p class="text-gray-700 mb-4">Learn about the local customs and workplace etiquette.</p>
-                    <a href="etiquette.html" class="text-deep-green hover:underline">View Guide</a>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md transition-transform duration-300 transform hover:-translate-y-1 hover:shadow-lg">
-                    <h2 class="text-xl font-bold mb-2 text-deep-green">Nigeria Details</h2>
-                    <p class="text-gray-700 mb-4">Information about living and working in Nigeria.</p>
-                    <a href="#" class="text-deep-green hover:underline">Learn More</a>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md transition-transform duration-300 transform hover:-translate-y-1 hover:shadow-lg">
-                    <h2 class="text-xl font-bold mb-2 text-deep-green">Image Gallery</h2>
-                    <p class="text-gray-700 mb-4">Browse and view company images.</p>
-                    <a href="gallery.html" class="text-deep-green hover:underline">View Gallery</a>
-                </div>
-            </div>
+    </div>
+    <div class="container">
+        <div class="welcome-card">
+            <div id="welcome"></div>
         </div>
-    </main>
+        <a href="onboarding-plan.html" class="card">
+            <h2>Onboarding Plan</h2>
+            <div class="arrow">→</div>
+        </a>
+        <a href="local-contacts.html" class="card">
+            <h2>Local Contacts</h2>
+            <div class="arrow">→</div>
+        </a>
+        <a href="etiquette.html" class="card">
+            <h2>Etiquette Guide</h2>
+            <div class="arrow">→</div>
+        </a>
+        <a href="#" class="card">
+            <h2>Nigeria Details</h2>
+            <div class="arrow">→</div>
+        </a>
+        <a href="gallery.html" class="card">
+            <h2>Image Gallery</h2>
+            <div class="arrow">→</div>
+        </a>
+    </div>
 
     <script>
         let user;
@@ -116,7 +94,7 @@
         if (!user || user.role !== 'Expat') {
             window.location.href = 'index.html';
         } else {
-            document.getElementById('welcome').innerHTML = `<h1 class="text-3xl font-bold">Welcome, ${user.firstName} ${user.lastName}!</h1><p>You are logged in as an Expat. Explore your personalized onboarding resources.</p>`;
+            document.getElementById('welcome').innerHTML = `<h1>Welcome, ${user.firstName} ${user.lastName}!</h1><p>You are logged in as an Expat. Explore your personalized onboarding resources.</p>`;
         }
 
         function logout() {
